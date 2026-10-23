@@ -2,10 +2,12 @@
 #include "main.h"
 
 bool KEYS[322];
+Lane* lanes[6];
 int main(int argc, char* argv[])
 {
     Beatgame game;
-	game.Initialise();
+	game.InitialiseSDL();
+    game.InitialiseGame();
 	while(game.IsRunning()) {
 		game.HandleInput();
 		game.Update();
@@ -17,7 +19,7 @@ int main(int argc, char* argv[])
 
 Beatgame::Beatgame() : isRunning(true), gameOver(false), window(nullptr), renderer(nullptr), font(nullptr) {};
 
-void Beatgame::Initialise() {
+void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window and renderer, load font
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
         isRunning = false;
@@ -54,8 +56,15 @@ void Beatgame::Initialise() {
 
 }
 
-#pragma region "Input handling"
-void Beatgame::HandleInput() {
+void Beatgame::InitialiseGame() { //Create lanes
+    for (int i = 1; i < sizeof(lanes) / sizeof(lanes[0]) + 1; i++) {
+		Lane* lane = new Lane(i);
+		lanes[i] = lane;
+		cout << "Lane " << i << " created" << endl;
+	}
+}
+
+void Beatgame::HandleInput() { //Check for input events
     SDL_Event event;
     while (SDL_PollEvent(&event) != 0) {
 		switch (event.type) { //Input if button is pressed or released
@@ -93,13 +102,10 @@ void Beatgame::HandleInput() {
         }   
     }
 }
-#pragma endregion "Input handling"
 
-#pragma region "Board"
-void Beatgame::Render() {
+void Beatgame::Render() { //Create the window and draw the game over text if the game is over
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
-    DrawMap();
     if (gameOver) {
         SDL_Surface* surface = TTF_RenderText_Solid(font, "GameOver", 0, textColor);
         SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -111,25 +117,14 @@ void Beatgame::Render() {
     SDL_RenderPresent(renderer);
 }
 
-void Beatgame::DrawMap() {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderClear(renderer);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-}
-#pragma endregion "Board"
-
-bool Beatgame::IsRunning() const {
+bool Beatgame::IsRunning() const { //Used in main() to check if the game is running
     return isRunning;
 }
 
-void Beatgame::Update() {
-    CheckWin();
+void Beatgame::Update() { //Update the game state
 }
 
-void Beatgame::CheckWin() {
-}
-
-void Beatgame::Cleanup() {
+void Beatgame::Cleanup() { //Called when game is over, cleans up SDL and TTF libraries, destroys window and renderer
     TTF_CloseFont(font);
     TTF_Quit();
     SDL_DestroyRenderer(renderer);

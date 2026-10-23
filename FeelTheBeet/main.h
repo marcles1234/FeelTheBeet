@@ -8,7 +8,8 @@ using namespace std;
 class Beatgame {
 public:
 	Beatgame();
-	void Initialise();
+	void InitialiseSDL();
+	void InitialiseGame();
 	void Cleanup();
 	void HandleInput();
 	void Update();
@@ -42,8 +43,13 @@ private:
 
 class Lane {
 public:
+	int laneID;
+	Lane(int typeIn) {
+		laneID = typeIn;
+	}
+	void getID() {
+		cout << laneID << endl;
+	}
 	list<Note*> notes;
 	void HitNote();
-private:
-	int laneID;
 };
