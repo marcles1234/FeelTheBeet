@@ -1,13 +1,13 @@
 ﻿  main.cpp
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(23,17): warning C4804: '<': unsafe use of type 'bool' in operation
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(28,23): warning C4806: '==': unsafe operation: no value of type 'bool' promoted to type 'int' can equal the given constant
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(45,45): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(112,42): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(112,42): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(112,59): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(112,59): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(112,64): warning C4838: conversion from 'const int' to 'float' requires a narrowing conversion
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(112,64): warning C4244: 'initializing': conversion from 'const int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(112,74): warning C4838: conversion from 'const int' to 'float' requires a narrowing conversion
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(112,74): warning C4244: 'initializing': conversion from 'const int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(24,17): warning C4804: '<': unsafe use of type 'bool' in operation
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(29,23): warning C4806: '==': unsafe operation: no value of type 'bool' promoted to type 'int' can equal the given constant
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(46,45): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(178,42): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(178,42): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(178,59): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(178,59): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(178,64): warning C4838: conversion from 'const int' to 'float' requires a narrowing conversion
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(178,64): warning C4244: 'initializing': conversion from 'const int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(178,74): warning C4838: conversion from 'const int' to 'float' requires a narrowing conversion
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(178,74): warning C4244: 'initializing': conversion from 'const int' to 'float', possible loss of data
   FeelTheBeet.vcxproj -> C:\Users\marci\source\repos\FeelTheBeet\x64\Debug\FeelTheBeet.exe

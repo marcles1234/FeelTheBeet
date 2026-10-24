@@ -32,6 +32,7 @@ private:
 class Note {
 public:
 	int lane;
+	int noteID;
 	float lingerTime;
 	float speed;
 	void Move();

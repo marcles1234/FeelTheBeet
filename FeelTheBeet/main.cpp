@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm> //temp
 #include "main.h"
 
 bool KEYS[322];
@@ -62,6 +63,49 @@ void Beatgame::InitialiseGame() { //Create lanes
 		lanes[i] = lane;
 		cout << "Lane " << i << " created" << endl;
 	}
+	//temporary create notes for testing
+    Note* note = new Note();
+    note->lane = 1;
+    note->noteID = 1;
+    lanes[note->lane]->notes.push_back(note);
+    note = new Note();
+    note->lane = 1;
+	note->noteID = 2;
+    lanes[note->lane]->notes.push_back(note);
+    note = new Note();
+    note->lane = 1;
+	note->noteID = 3;
+    lanes[note->lane]->notes.push_back(note);
+
+    note = new Note();
+    note->lane = 2;
+	note->noteID = 4;
+    lanes[note->lane]->notes.push_back(note);
+    note = new Note();
+    note->lane = 2;
+	note->noteID = 5;
+    lanes[note->lane]->notes.push_back(note);
+
+    note = new Note();
+    note->lane = 3;
+    note->noteID = 5;
+    lanes[note->lane]->notes.push_back(note);
+
+    note = new Note();
+    note->lane = 4;
+    note->noteID = 5;
+    lanes[note->lane]->notes.push_back(note);
+
+    note = new Note();
+    note->lane = 5;
+    note->noteID = 5;
+    lanes[note->lane]->notes.push_back(note);
+
+    note = new Note();
+    note->lane = 6;
+    note->noteID = 5;
+    lanes[note->lane]->notes.push_back(note);
+    
 }
 
 void Beatgame::HandleInput() { //Check for input events
@@ -76,23 +120,38 @@ void Beatgame::HandleInput() { //Check for input events
                 if (!gameOver) {
 					switch (event.key.key) { //Individual key presses
                         case SDLK_W:
-                            cout << "W key was pressed" << endl;
+                            lanes[1]->HitNote();
 					        break;
                         case SDLK_E:
-                            cout << "E key was pressed" << endl;
+                            lanes[2]->HitNote();
                             break;
                         case SDLK_A:
-                            cout << "A key was pressed" << endl;
+                            lanes[3]->HitNote();
                             break;
                         case SDLK_D:
-                            cout << "D key was pressed" << endl;
+                            lanes[4]->HitNote();
                             break;
                         case SDLK_Z:
-                            cout << "Z key was pressed" << endl;
+                            lanes[5]->HitNote();
                             break;
                         case SDLK_X:
-                            cout << "X key was pressed" << endl;
+                            lanes[6]->HitNote();
                             break;
+                        case SDLK_Q: {//temp create note in lane 1
+                            Note* note = new Note();
+                            note->lane = 1;
+                            note->noteID = 6;
+                            lanes[note->lane]->notes.push_back(note);
+                            cout << "Note in lane " << note->lane << " created" << " ID = " << note->noteID << endl;
+                            break;
+                        }
+                        case SDLK_R: {//temp remove note in lane 1
+                            if (!lanes[1]->notes.empty()) {
+                                lanes[1]->notes.pop_front();
+                                cout << "Note in lane 1 has been removed" << endl;
+                            }
+                            break;
+                        }
                     }
                 }
                 break;
@@ -101,6 +160,13 @@ void Beatgame::HandleInput() { //Check for input events
 		        break;
         }   
     }
+}
+
+void Lane::HitNote() { //Check if a note is in the hitbox and remove it if it is
+	cout << "Lane " << laneID << " hit" << endl;
+    for_each (notes.begin(), notes.end(), [](Note* note) {
+        cout << "Note in lane " << note->lane << " hit" << " ID = " << note->noteID << endl;
+    });
 }
 
 void Beatgame::Render() { //Create the window and draw the game over text if the game is over
