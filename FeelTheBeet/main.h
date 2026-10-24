@@ -32,7 +32,6 @@ private:
 class Note {
 public:
 	int lane;
-	int noteID;
 	float lingerTime;
 	float speed;
 	void Move();
@@ -53,4 +52,6 @@ public:
 	}
 	list<Note*> notes;
 	void HitNote();
+	void CreateNote();
+	void CheckNotes();
 };

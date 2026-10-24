@@ -1,5 +1,5 @@
 #include <iostream>
-#include <algorithm> //temp
+#include <algorithm> //used for .size() function
 #include "main.h"
 
 bool KEYS[322];
@@ -66,44 +66,35 @@ void Beatgame::InitialiseGame() { //Create lanes
 	//temporary create notes for testing
     Note* note = new Note();
     note->lane = 1;
-    note->noteID = 1;
     lanes[note->lane]->notes.push_back(note);
     note = new Note();
     note->lane = 1;
-	note->noteID = 2;
     lanes[note->lane]->notes.push_back(note);
     note = new Note();
     note->lane = 1;
-	note->noteID = 3;
     lanes[note->lane]->notes.push_back(note);
 
     note = new Note();
     note->lane = 2;
-	note->noteID = 4;
     lanes[note->lane]->notes.push_back(note);
     note = new Note();
     note->lane = 2;
-	note->noteID = 5;
     lanes[note->lane]->notes.push_back(note);
 
     note = new Note();
     note->lane = 3;
-    note->noteID = 5;
     lanes[note->lane]->notes.push_back(note);
 
     note = new Note();
     note->lane = 4;
-    note->noteID = 5;
     lanes[note->lane]->notes.push_back(note);
 
     note = new Note();
     note->lane = 5;
-    note->noteID = 5;
     lanes[note->lane]->notes.push_back(note);
 
     note = new Note();
     note->lane = 6;
-    note->noteID = 5;
     lanes[note->lane]->notes.push_back(note);
     
 }
@@ -137,21 +128,24 @@ void Beatgame::HandleInput() { //Check for input events
                         case SDLK_X:
                             lanes[6]->HitNote();
                             break;
-                        case SDLK_Q: {//temp create note in lane 1
-                            Note* note = new Note();
-                            note->lane = 1;
-                            note->noteID = 6;
-                            lanes[note->lane]->notes.push_back(note);
-                            cout << "Note in lane " << note->lane << " created" << " ID = " << note->noteID << endl;
+                        case SDLK_1:
+                            lanes[1]->CreateNote();
+							break;
+                        case SDLK_2:
+                            lanes[2]->CreateNote();
                             break;
-                        }
-                        case SDLK_R: {//temp remove note in lane 1
-                            if (!lanes[1]->notes.empty()) {
-                                lanes[1]->notes.pop_front();
-                                cout << "Note in lane 1 has been removed" << endl;
-                            }
+                        case SDLK_3:
+                            lanes[3]->CreateNote();
                             break;
-                        }
+                        case SDLK_4:
+                            lanes[4]->CreateNote();
+                            break;
+                        case SDLK_5:
+                            lanes[5]->CreateNote();
+                            break;
+                        case SDLK_6:
+                            lanes[6]->CreateNote();
+							break;
                     }
                 }
                 break;
@@ -162,11 +156,25 @@ void Beatgame::HandleInput() { //Check for input events
     }
 }
 
-void Lane::HitNote() { //Check if a note is in the hitbox and remove it if it is
+void Lane::HitNote() { //Check if a note is in the lane and remove it if it is
 	cout << "Lane " << laneID << " hit" << endl;
-    for_each (notes.begin(), notes.end(), [](Note* note) {
-        cout << "Note in lane " << note->lane << " hit" << " ID = " << note->noteID << endl;
-    });
+    if (!lanes[laneID]->notes.empty()) {
+        lanes[laneID]->notes.pop_front();
+    }
+    lanes[laneID]->CheckNotes();
+}
+
+void Lane::CreateNote() { //Create a note in the lane
+    lanes[laneID]->CheckNotes();
+    Note* note = new Note();
+	note->lane = laneID;
+	lanes[note->lane]->notes.push_back(note);
+	cout << "Note in lane " << note->lane << " created" << endl;
+	lanes[laneID]->CheckNotes();
+}
+
+void Lane::CheckNotes() { //Check all notes in a lane
+	cout << "There are " << notes.size() << " notes in lane " << laneID << endl;
 }
 
 void Beatgame::Render() { //Create the window and draw the game over text if the game is over
