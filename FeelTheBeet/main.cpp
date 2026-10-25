@@ -1,9 +1,16 @@
+// Test song bpm = 106 -> 1.766 bps -> 0.566 seconds per beat
+
 #include <iostream>
 #include <algorithm> //used for .size() function
 #include "main.h"
 
 bool KEYS[322];
 Lane* lanes[6];
+
+static SDL_AudioStream* stream = NULL;
+static Uint8* wav_data = NULL;
+static Uint32 wav_data_len = 0;
+
 int main(int argc, char* argv[])
 {
     Beatgame game;
@@ -20,8 +27,10 @@ int main(int argc, char* argv[])
 
 Beatgame::Beatgame() : isRunning(true), gameOver(false), window(nullptr), renderer(nullptr), font(nullptr) {};
 
-void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window and renderer, load font
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window and renderer, load font and .wav file, set the metadata
+    SDL_SetAppMetadata("Beet Game", "1.0", "com.example.beetgame");
+    
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
         isRunning = false;
         return;
@@ -50,11 +59,36 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
         return;
     }
 
+    // Audio setup sourced from https://github.com/libsdl-org/SDL/blob/main/examples/audio/03-load-wav/load-wav.c
+    SDL_AudioSpec spec;
+    char* wav_path = NULL;
+    SDL_asprintf(&wav_path, "test.wav", SDL_GetBasePath());  /* allocate a string of the full file path */
+    if (!SDL_LoadWAV(wav_path, &spec, &wav_data, &wav_data_len)) {
+        cerr << "Couldn't load WAV file: " << SDL_GetError() << endl;
+        return;
+    }
+	
+    stream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec, NULL, NULL);
+	SDL_free(wav_path); //deallocate the string after use
+    if (!stream) {
+        cerr << "Couldn't create audio stream: " << SDL_GetError() << endl;
+        return;
+    }
+
+    if (!SDL_PutAudioStreamData(stream, wav_data, wav_data_len)) { // Put the WAV data into the stream's queue
+        cerr << "Couldn't queue WAV data: " << SDL_GetError() << endl;
+        return;
+    }
+
+    if (!SDL_ResumeAudioStreamDevice(stream)) { // Start audio playback
+        cerr << "Couldn't start audio playback: " << SDL_GetError() << endl;
+        return;
+    }
+
     //Set up key presses
     for (int i = 0; i < 322; i++) { // init them all to false
         KEYS[i] = false;
     }
-
 }
 
 void Beatgame::InitialiseGame() { //Create lanes
@@ -159,7 +193,8 @@ void Beatgame::HandleInput() { //Check for input events
 void Lane::HitNote() { //Check if a note is in the lane and remove it if it is
 	cout << "Lane " << laneID << " hit" << endl;
     if (!lanes[laneID]->notes.empty()) {
-        lanes[laneID]->notes.pop_front();
+		delete lanes[laneID]->notes.front(); // Delete the note object to free memory
+		lanes[laneID]->notes.pop_front(); // Remove the note from the lanes list
     }
     lanes[laneID]->CheckNotes();
 }
@@ -203,5 +238,6 @@ void Beatgame::Cleanup() { //Called when game is over, cleans up SDL and TTF lib
     TTF_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    SDL_free(wav_data);
     SDL_Quit();
 }
