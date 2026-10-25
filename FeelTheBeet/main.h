@@ -1,6 +1,10 @@
 #pragma once
+#include <iostream>
+#include <algorithm>
 #include <list>
 #include <chrono>
+#include <thread>
+#include <random>
 
 using namespace std;
 #include "SDL3/SDL.h"

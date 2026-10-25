@@ -1,7 +1,5 @@
 // Test song bpm = 106 -> 1.766 bps -> 0.566 seconds per beat
 
-#include <iostream>
-#include <algorithm>
 #include "main.h"
 
 bool KEYS[322];
@@ -116,12 +114,26 @@ void Beatgame::InitialiseGame() { //Create lanes
 void Beatcounter::StartBeatCounter(Beatcounter* beatcounter) {
     beatTracker = 1;
     start_time = chrono::steady_clock::now();
+
+	// Variable to generate random numbers for note creation
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> dist(1, 6);
+
     while (stream != NULL) {
         if (elapsed() >= beatcounter->timePerBeat * 4) {
             beatTracker += 4;
 			start_time = chrono::steady_clock::now();
             cout << "New bar" << endl;
+
+			// Randomly create next 4 notes
+            for (int i = 0; i < 4; i++) {
+                int randomLane = dist(gen);
+                lanes[randomLane]->CreateNote();
+			}
         }
+        // Sleep for a short duration to avoid busy waiting
+		this_thread::sleep_for(chrono::milliseconds(10));
     }
 }
 
@@ -197,12 +209,10 @@ void Lane::HitNote() { //Check if a note is in the lane and remove it if it is
 }
 
 void Lane::CreateNote() { //Create a note in the lane
-    lanes[laneID]->CheckNotes();
     Note* note = new Note();
 	note->lane = laneID;
 	lanes[note->lane]->notes.push_back(note);
 	cout << "Note in lane " << note->lane << " created" << endl;
-	lanes[laneID]->CheckNotes();
 }
 
 void Lane::CheckNotes() { //Check all notes in a lane
