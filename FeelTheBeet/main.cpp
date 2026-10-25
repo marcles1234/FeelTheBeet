@@ -1,7 +1,7 @@
 // Test song bpm = 106 -> 1.766 bps -> 0.566 seconds per beat
 
 #include <iostream>
-#include <algorithm> //used for .size() function
+#include <algorithm>
 #include "main.h"
 
 bool KEYS[322];
@@ -16,6 +16,13 @@ int main(int argc, char* argv[])
     Beatgame game;
 	game.InitialiseSDL();
     game.InitialiseGame();
+
+    Beatcounter beatcounter;
+	beatcounter.bpm = 106.0f;
+	beatcounter.timePerBeat = 60.0f / beatcounter.bpm;
+	beatcounter.beatTracker = 0;
+	beatcounter.StartBeatCounter(&beatcounter);
+
 	while(game.IsRunning()) {
 		game.HandleInput();
 		game.Update();
@@ -104,33 +111,23 @@ void Beatgame::InitialiseGame() { //Create lanes
     note = new Note();
     note->lane = 1;
     lanes[note->lane]->notes.push_back(note);
-    note = new Note();
-    note->lane = 1;
-    lanes[note->lane]->notes.push_back(note);
+}
 
-    note = new Note();
-    note->lane = 2;
-    lanes[note->lane]->notes.push_back(note);
-    note = new Note();
-    note->lane = 2;
-    lanes[note->lane]->notes.push_back(note);
+void Beatcounter::StartBeatCounter(Beatcounter* beatcounter) {
+    beatTracker = 1;
+    start_time = chrono::steady_clock::now();
+    while (stream != NULL) {
+        if (elapsed() >= beatcounter->timePerBeat * 4) {
+            beatTracker += 4;
+			start_time = chrono::steady_clock::now();
+            cout << "New bar" << endl;
+        }
+    }
+}
 
-    note = new Note();
-    note->lane = 3;
-    lanes[note->lane]->notes.push_back(note);
-
-    note = new Note();
-    note->lane = 4;
-    lanes[note->lane]->notes.push_back(note);
-
-    note = new Note();
-    note->lane = 5;
-    lanes[note->lane]->notes.push_back(note);
-
-    note = new Note();
-    note->lane = 6;
-    lanes[note->lane]->notes.push_back(note);
-    
+double Beatcounter::elapsed() const {
+    auto now = chrono::steady_clock::now();
+    return chrono::duration<double>(now - start_time).count();
 }
 
 void Beatgame::HandleInput() { //Check for input events

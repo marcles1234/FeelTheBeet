@@ -1,5 +1,6 @@
 #pragma once
 #include <list>
+#include <chrono>
 
 using namespace std;
 #include "SDL3/SDL.h"
@@ -55,3 +56,17 @@ public:
 	void CreateNote();
 	void CheckNotes();
 };
+
+class Beatcounter {
+public:
+	float bpm;
+	float timePerBeat;
+	int beatTracker;
+	void StartBeatCounter(Beatcounter* beatcounter);
+	void Start();
+	void Stop();
+	double elapsed() const;
+private:
+	bool running;
+	chrono::steady_clock::time_point start_time, end_time;
+}; 
