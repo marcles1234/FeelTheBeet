@@ -147,6 +147,9 @@ void Beatcounter::StartBeatCounter(Beatcounter* beatcounter) {
     mt19937 gen(rd());
     uniform_int_distribution<> dist(1, 6);
 
+    int randomLane = 1;
+    int lastNote = 0;
+
     while (running) {
         this_thread::sleep_until(nextBeat);
         
@@ -155,8 +158,11 @@ void Beatcounter::StartBeatCounter(Beatcounter* beatcounter) {
         nextBeat += beatDuration;
 
 		// Randomly create next note
-        int randomLane = dist(gen);
+        do {
+            randomLane = dist(gen);
+        } while (randomLane == lastNote);
         lanes[randomLane]->CreateNote(nextBeat);
+		lastNote = randomLane;
     }
 }
 
