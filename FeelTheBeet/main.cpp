@@ -4,6 +4,7 @@
 
 bool KEYS[322];
 Lane* lanes[7];
+int temp = 100; //DELETE ONCE NOTE SPAWNING IS IMPLEMENTED
 
 static SDL_AudioStream* stream = NULL;
 static Uint8* wav_data = NULL;
@@ -116,7 +117,6 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
     }
 }
 
-
 void Beatgame::InitialiseGame() { //Create lanes
     for (int i = 1; i < sizeof(lanes) / sizeof(lanes[0]) + 1; i++) {
 		Lane* lane = new Lane(i);
@@ -213,7 +213,8 @@ void Lane::CreateNote(chrono::steady_clock::time_point hitTime) { //Create a not
 	note->lane = laneID;
     note->hitTime = hitTime;
 	note->noteX = 100.0f * laneID; // Set the X position based on the lane ID
-    note->noteY = 100.0f;
+    note->noteY = 100 + temp;
+    temp += 10;
 	notes.push_back(note);
 	cout << "Note in lane " << note->lane << " created" << endl;
 }
@@ -248,11 +249,31 @@ void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture) { //Render the n
     }
 }
 
+bool Note::isExpired() { //Check if the note has expired and remove it if it has
+    auto now = chrono::steady_clock::now();
+    auto elapsed = chrono::duration_cast<chrono::milliseconds>(now - hitTime).count();
+    return elapsed > lingerTime;
+}
+
 bool Beatgame::IsRunning() const { //Used in main() to check if the game is running
     return isRunning;
 }
 
 void Beatgame::Update() { //Update the game state
+    for (int i = 1; i <= 6; i++) {
+		lanes[i]->Update();
+    }
+}
+
+void Lane::Update() { //Called from Beatgame::Update(), checks if notes have expired and removes them if they have
+    for (auto it = notes.begin(); it != notes.end();) { //List through notes
+		if ((*it)->isExpired()) { //Check if the note has expired
+            delete* it;
+            it = notes.erase(it);
+        } else {
+			++it; //Move to the next note if not expired
+        }
+    }
 }
 
 void Beatgame::Cleanup() { //Called when game is over, cleans up SDL and TTF libraries, destroys window and renderer

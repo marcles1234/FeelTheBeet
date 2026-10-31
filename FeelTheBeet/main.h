@@ -37,7 +37,7 @@ private:
 class Note {
 public:
 	int lane;
-	float lingerTime;
+	float lingerTime = 1000.0f;
 	float speed;
 	chrono::steady_clock::time_point hitTime;
 	float noteX;
@@ -47,6 +47,7 @@ public:
 	void Move();
 	int Hit();
 	void Turnback();
+	bool isExpired();
 private:
 	float timeAlive;
 };
@@ -65,6 +66,7 @@ public:
 	void CreateNote(chrono::steady_clock::time_point hitTime);
 	void CheckNotes();
 	void Render(SDL_Renderer* renderer, SDL_Texture* texture);
+	void Update();
 };
 
 class Beatcounter {
