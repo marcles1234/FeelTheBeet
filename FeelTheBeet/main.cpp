@@ -19,7 +19,8 @@ int main(int argc, char* argv[])
 	beatcounter.bpm = 106.0f;
 	beatcounter.timePerBeat = 60.0f / beatcounter.bpm;
 	beatcounter.beatTracker = 0;
-	beatcounter.StartBeatCounter(&beatcounter);
+
+	thread beatThread(&Beatcounter::StartBeatCounter, &beatcounter, &beatcounter);
 
 	while(game.IsRunning()) {
 		game.HandleInput();
@@ -90,6 +91,18 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
         return;
     }
 
+	SDL_Surface* surface = IMG_Load("triangle.png");
+    if (!surface) {
+        cerr << "Couldn't load image: " << SDL_GetError() << endl;
+        return;
+	}
+	beatTexture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (!beatTexture) {
+        cerr << "Couldn't create texture: " << SDL_GetError() << endl;
+        return;
+    }
+    SDL_DestroySurface(surface);
+
     //Set up key presses
     for (int i = 0; i < 322; i++) { // init them all to false
         KEYS[i] = false;
@@ -113,7 +126,11 @@ void Beatgame::InitialiseGame() { //Create lanes
 
 void Beatcounter::StartBeatCounter(Beatcounter* beatcounter) {
     beatTracker = 1;
-    auto nextBeat = chrono::steady_clock::now() + chrono::duration<double>(timePerBeat);
+    auto beatDuration = chrono::duration_cast<chrono::steady_clock::duration>(
+        chrono::duration<double>(timePerBeat)
+    );
+
+    auto nextBeat = chrono::steady_clock::now() + beatDuration;
 
     float overflow = 0.0f;
 
@@ -127,17 +144,12 @@ void Beatcounter::StartBeatCounter(Beatcounter* beatcounter) {
         
         beatTracker ++;
 
+        nextBeat += beatDuration;
+
 		// Randomly create next note
         int randomLane = dist(gen);
-        lanes[randomLane]->CreateNote();
-
-        nextBeat += chrono::duration<double>(timePerBeat);
+        lanes[randomLane]->CreateNote(nextBeat);
     }
-}
-
-double Beatcounter::elapsed() const {
-    auto now = chrono::steady_clock::now();
-    return chrono::duration<double>(now - start_time).count();
 }
 
 void Beatgame::HandleInput() { //Check for input events
@@ -169,24 +181,6 @@ void Beatgame::HandleInput() { //Check for input events
                         case SDLK_X:
                             lanes[6]->HitNote();
                             break;
-                        case SDLK_1:
-                            lanes[1]->CreateNote();
-							break;
-                        case SDLK_2:
-                            lanes[2]->CreateNote();
-                            break;
-                        case SDLK_3:
-                            lanes[3]->CreateNote();
-                            break;
-                        case SDLK_4:
-                            lanes[4]->CreateNote();
-                            break;
-                        case SDLK_5:
-                            lanes[5]->CreateNote();
-                            break;
-                        case SDLK_6:
-                            lanes[6]->CreateNote();
-							break;
                     }
                 }
                 break;
@@ -206,9 +200,10 @@ void Lane::HitNote() { //Check if a note is in the lane and remove it if it is
     lanes[laneID]->CheckNotes();
 }
 
-void Lane::CreateNote() { //Create a note in the lane
+void Lane::CreateNote(chrono::steady_clock::time_point hitTime) { //Create a note in the lane
     Note* note = new Note();
 	note->lane = laneID;
+    note->hitTime = hitTime;
 	lanes[note->lane]->notes.push_back(note);
 	cout << "Note in lane " << note->lane << " created" << endl;
 }
@@ -220,6 +215,8 @@ void Lane::CheckNotes() { //Check all notes in a lane
 void Beatgame::Render() { //Create the window and draw the game over text if the game is over
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
+    SDL_FRect destination = { 100, 100, 200, 200 };
+    SDL_RenderTexture(renderer, beatTexture, NULL, &destination);
     if (gameOver) {
         SDL_Surface* surface = TTF_RenderText_Solid(font, "GameOver", 0, textColor);
         SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -240,6 +237,10 @@ void Beatgame::Update() { //Update the game state
 
 void Beatgame::Cleanup() { //Called when game is over, cleans up SDL and TTF libraries, destroys window and renderer
     TTF_CloseFont(font);
+    if (beatTexture) {
+        SDL_DestroyTexture(beatTexture);
+        beatTexture = nullptr;
+    }
     TTF_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

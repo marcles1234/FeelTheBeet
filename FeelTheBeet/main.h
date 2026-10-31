@@ -9,6 +9,7 @@
 using namespace std;
 #include "SDL3/SDL.h"
 #include "SDL3_ttf/SDL_ttf.h"
+#include <SDL3_image/SDL_image.h>
 
 class Beatgame {
 public:
@@ -22,6 +23,7 @@ public:
 	void DrawMap();
 	void CheckWin();
 	bool IsRunning() const;
+	SDL_Texture* beatTexture;
 private:
 	const int screenWidth = 1200;
 	const int screenHeight = 1000;
@@ -39,6 +41,7 @@ public:
 	int lane;
 	float lingerTime;
 	float speed;
+	chrono::steady_clock::time_point hitTime;
 	void Move();
 	int Hit();
 	void Turnback();
@@ -57,7 +60,7 @@ public:
 	}
 	list<Note*> notes;
 	void HitNote();
-	void CreateNote();
+	void CreateNote(chrono::steady_clock::time_point hitTime);
 	void CheckNotes();
 };
 
@@ -67,9 +70,6 @@ public:
 	float timePerBeat;
 	int beatTracker;
 	void StartBeatCounter(Beatcounter* beatcounter);
-	void Start();
-	void Stop();
-	double elapsed() const;
 private:
 	bool running;
 	chrono::steady_clock::time_point start_time, end_time;
