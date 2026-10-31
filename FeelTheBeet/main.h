@@ -20,8 +20,6 @@ public:
 	void HandleInput();
 	void Update();
 	void Render();
-	void DrawMap();
-	void CheckWin();
 	bool IsRunning() const;
 	SDL_Texture* beatTexture;
 private:
@@ -42,6 +40,10 @@ public:
 	float lingerTime;
 	float speed;
 	chrono::steady_clock::time_point hitTime;
+	float noteX;
+	float noteY;
+	float noteWidth = 100.0f;
+	float noteHeight = 100.0f;
 	void Move();
 	int Hit();
 	void Turnback();
@@ -62,6 +64,7 @@ public:
 	void HitNote();
 	void CreateNote(chrono::steady_clock::time_point hitTime);
 	void CheckNotes();
+	void Render(SDL_Renderer* renderer, SDL_Texture* texture);
 };
 
 class Beatcounter {
@@ -69,8 +72,8 @@ public:
 	float bpm;
 	float timePerBeat;
 	int beatTracker;
+	bool running;
 	void StartBeatCounter(Beatcounter* beatcounter);
 private:
-	bool running;
 	chrono::steady_clock::time_point start_time, end_time;
 }; 

@@ -3,11 +3,13 @@
 #include "main.h"
 
 bool KEYS[322];
-Lane* lanes[6];
+Lane* lanes[7];
 
 static SDL_AudioStream* stream = NULL;
 static Uint8* wav_data = NULL;
 static Uint32 wav_data_len = 0;
+
+SDL_Texture* noteTexture;
 
 int main(int argc, char* argv[])
 {
@@ -15,10 +17,13 @@ int main(int argc, char* argv[])
 	game.InitialiseSDL();
     game.InitialiseGame();
 
+	noteTexture = game.beatTexture;
+
     Beatcounter beatcounter;
 	beatcounter.bpm = 106.0f;
 	beatcounter.timePerBeat = 60.0f / beatcounter.bpm;
 	beatcounter.beatTracker = 0;
+	beatcounter.running = true;
 
 	thread beatThread(&Beatcounter::StartBeatCounter, &beatcounter, &beatcounter);
 
@@ -27,6 +32,8 @@ int main(int argc, char* argv[])
 		game.Update();
 		game.Render();
 	}
+    beatcounter.running = false;
+	beatThread.join();
 	game.Cleanup();
 	return 0;
 }
@@ -109,6 +116,7 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
     }
 }
 
+
 void Beatgame::InitialiseGame() { //Create lanes
     for (int i = 1; i < sizeof(lanes) / sizeof(lanes[0]) + 1; i++) {
 		Lane* lane = new Lane(i);
@@ -139,7 +147,7 @@ void Beatcounter::StartBeatCounter(Beatcounter* beatcounter) {
     mt19937 gen(rd());
     uniform_int_distribution<> dist(1, 6);
 
-    while (stream != NULL) {
+    while (running) {
         this_thread::sleep_until(nextBeat);
         
         beatTracker ++;
@@ -193,18 +201,20 @@ void Beatgame::HandleInput() { //Check for input events
 
 void Lane::HitNote() { //Check if a note is in the lane and remove it if it is
 	cout << "Lane " << laneID << " hit" << endl;
-    if (!lanes[laneID]->notes.empty()) {
-		delete lanes[laneID]->notes.front(); // Delete the note object to free memory
-		lanes[laneID]->notes.pop_front(); // Remove the note from the lanes list
+    if (!notes.empty()) {
+		delete notes.front(); // Delete the note object to free memory
+		notes.pop_front(); // Remove the note from the lanes list
     }
-    lanes[laneID]->CheckNotes();
+    CheckNotes();
 }
 
 void Lane::CreateNote(chrono::steady_clock::time_point hitTime) { //Create a note in the lane
     Note* note = new Note();
 	note->lane = laneID;
     note->hitTime = hitTime;
-	lanes[note->lane]->notes.push_back(note);
+	note->noteX = 100.0f * laneID; // Set the X position based on the lane ID
+    note->noteY = 100.0f;
+	notes.push_back(note);
 	cout << "Note in lane " << note->lane << " created" << endl;
 }
 
@@ -215,8 +225,11 @@ void Lane::CheckNotes() { //Check all notes in a lane
 void Beatgame::Render() { //Create the window and draw the game over text if the game is over
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
-    SDL_FRect destination = { 100, 100, 200, 200 };
-    SDL_RenderTexture(renderer, beatTexture, NULL, &destination);
+    
+    for (int i = 1; i <= 6 ; i++) {
+        lanes[i]->Render(renderer, beatTexture);
+	}
+
     if (gameOver) {
         SDL_Surface* surface = TTF_RenderText_Solid(font, "GameOver", 0, textColor);
         SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -226,6 +239,13 @@ void Beatgame::Render() { //Create the window and draw the game over text if the
         SDL_DestroyTexture(texture);
     }
     SDL_RenderPresent(renderer);
+}
+
+void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture) { //Render the notes in the lane
+    for (Note* note : notes) {
+        SDL_FRect destination = { note->noteX, note->noteY, note->noteWidth, note->noteHeight };
+        SDL_RenderTexture(renderer, texture, NULL, &destination);
+    }
 }
 
 bool Beatgame::IsRunning() const { //Used in main() to check if the game is running
