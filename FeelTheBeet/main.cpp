@@ -113,7 +113,9 @@ void Beatgame::InitialiseGame() { //Create lanes
 
 void Beatcounter::StartBeatCounter(Beatcounter* beatcounter) {
     beatTracker = 1;
-    start_time = chrono::steady_clock::now();
+    auto nextBeat = chrono::steady_clock::now() + chrono::duration<double>(timePerBeat);
+
+    float overflow = 0.0f;
 
 	// Variable to generate random numbers for note creation
     random_device rd;
@@ -121,19 +123,15 @@ void Beatcounter::StartBeatCounter(Beatcounter* beatcounter) {
     uniform_int_distribution<> dist(1, 6);
 
     while (stream != NULL) {
-        if (elapsed() >= beatcounter->timePerBeat * 4) {
-            beatTracker += 4;
-			start_time = chrono::steady_clock::now();
-            cout << "New bar" << endl;
+        this_thread::sleep_until(nextBeat);
+        
+        beatTracker ++;
 
-			// Randomly create next 4 notes
-            for (int i = 0; i < 4; i++) {
-                int randomLane = dist(gen);
-                lanes[randomLane]->CreateNote();
-			}
-        }
-        // Sleep for a short duration to avoid busy waiting
-		this_thread::sleep_for(chrono::milliseconds(10));
+		// Randomly create next note
+        int randomLane = dist(gen);
+        lanes[randomLane]->CreateNote();
+
+        nextBeat += chrono::duration<double>(timePerBeat);
     }
 }
 
