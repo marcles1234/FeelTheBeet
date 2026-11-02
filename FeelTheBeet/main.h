@@ -62,10 +62,13 @@ public:
 		cout << laneID << endl;
 	}
 	list<Note*> notes;
+	float spawnX;
+	float spawnY;
+	double angle;
 	void HitNote();
 	void CreateNote(chrono::steady_clock::time_point hitTime);
 	void CheckNotes();
-	void Render(SDL_Renderer* renderer, SDL_Texture* texture);
+	void Render(SDL_Renderer* renderer, SDL_Texture* texture, double angle);
 	void Update();
 };
 

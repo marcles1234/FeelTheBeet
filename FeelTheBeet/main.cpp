@@ -10,15 +10,11 @@ static SDL_AudioStream* stream = NULL;
 static Uint8* wav_data = NULL;
 static Uint32 wav_data_len = 0;
 
-SDL_Texture* noteTexture;
-
 int main(int argc, char* argv[])
 {
     Beatgame game;
 	game.InitialiseSDL();
     game.InitialiseGame();
-
-	noteTexture = game.beatTexture;
 
     Beatcounter beatcounter;
 	beatcounter.bpm = 106.0f;
@@ -76,7 +72,7 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
     // Audio setup sourced from https://github.com/libsdl-org/SDL/blob/main/examples/audio/03-load-wav/load-wav.c
     SDL_AudioSpec spec;
     char* wav_path = NULL;
-    SDL_asprintf(&wav_path, "test.wav", SDL_GetBasePath());  /* allocate a string of the full file path */
+    SDL_asprintf(&wav_path, "test.wav", SDL_GetBasePath());
     if (!SDL_LoadWAV(wav_path, &spec, &wav_data, &wav_data_len)) {
         cerr << "Couldn't load WAV file: " << SDL_GetError() << endl;
         return;
@@ -118,10 +114,40 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
 }
 
 void Beatgame::InitialiseGame() { //Create lanes
-    for (int i = 1; i < sizeof(lanes) / sizeof(lanes[0]) + 1; i++) {
+    for (int i = 1; i < sizeof(lanes) / sizeof(lanes[0]); i++) {
 		Lane* lane = new Lane(i);
 		lanes[i] = lane;
-		cout << "Lane " << i << " created" << endl;
+        if (i == 1) {
+			lane->spawnX = 475.0f;
+			lane->spawnY = 283.5f;
+            lane->angle = 150.0;
+        }
+        else if (i == 2) {
+            lane->spawnX = 725.0f;
+            lane->spawnY = 283.5f;
+            lane->angle = 210.0;
+        }
+        else if (i == 3) {
+            lane->spawnX = 350.0f;
+            lane->spawnY = 500.0f;
+            lane->angle = 90.0;
+        }
+        else if (i == 4) {
+            lane->spawnX = 850.0f;
+            lane->spawnY = 500.0f;
+            lane->angle = 270.0;
+        }
+        else if (i == 5) {
+            lane->spawnX = 475.0f;
+            lane->spawnY = 716.5f;
+            lane->angle = 30.0;
+        }
+        else if (i == 6) {
+            lane->spawnX = 725.0f;
+            lane->spawnY = 716.5f;
+            lane->angle = 330.0;
+        }
+		cout << "Lane " << i << " created. With an angle of " << lane->angle << endl;
 	}
 	//temporary create notes for testing
     Note* note = new Note();
@@ -218,8 +244,8 @@ void Lane::CreateNote(chrono::steady_clock::time_point hitTime) { //Create a not
     Note* note = new Note();
 	note->lane = laneID;
     note->hitTime = hitTime;
-	note->noteX = 100.0f * laneID; // Set the X position based on the lane ID
-    note->noteY = 100 + temp;
+	note->noteX = spawnX; // Set the X position based on the lane ID
+    note->noteY = spawnY;
     temp += 10;
 	notes.push_back(note);
 	cout << "Note in lane " << note->lane << " created" << endl;
@@ -234,7 +260,7 @@ void Beatgame::Render() { //Create the window and draw the game over text if the
     SDL_RenderClear(renderer);
     
     for (int i = 1; i <= 6 ; i++) {
-        lanes[i]->Render(renderer, beatTexture);
+        lanes[i]->Render(renderer, beatTexture, lanes[i]->angle);
 	}
 
     if (gameOver) {
@@ -248,10 +274,10 @@ void Beatgame::Render() { //Create the window and draw the game over text if the
     SDL_RenderPresent(renderer);
 }
 
-void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture) { //Render the notes in the lane
+void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture, double angle) { //Render the notes in the lane
     for (Note* note : notes) {
         SDL_FRect destination = { note->noteX, note->noteY, note->noteWidth, note->noteHeight };
-        SDL_RenderTexture(renderer, texture, NULL, &destination);
+        SDL_RenderTextureRotated(renderer, texture, NULL, &destination, angle, NULL, SDL_FLIP_NONE);
     }
 }
 
