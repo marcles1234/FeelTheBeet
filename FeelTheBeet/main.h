@@ -25,6 +25,9 @@ public:
 private:
 	const int screenWidth = 1200;
 	const int screenHeight = 1000;
+	const int halfScreenWidth = screenWidth / 2;
+	const int halfScreenHeight = screenHeight / 2;
+	const int noteDistance = 400;
 	const int fontSize = 72;
 	SDL_Window* window;
 	SDL_Renderer* renderer;
@@ -38,7 +41,7 @@ class Note {
 public:
 	int lane;
 	float lingerTime = 1000.0f;
-	float speed;
+	float speed = 0.05f;
 	chrono::steady_clock::time_point hitTime;
 	float noteX;
 	float noteY;
@@ -68,7 +71,7 @@ public:
 	void HitNote();
 	void CreateNote(chrono::steady_clock::time_point hitTime);
 	void CheckNotes();
-	void Render(SDL_Renderer* renderer, SDL_Texture* texture, double angle);
+	void Render(SDL_Renderer* renderer, SDL_Texture* texture);
 	void Update();
 };
 

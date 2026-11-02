@@ -114,48 +114,43 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
 }
 
 void Beatgame::InitialiseGame() { //Create lanes
+    constexpr float PI = 3.14159265358979323846f;
+	float heightComp = sin(60.0 * PI / 180.0) * noteDistance;
     for (int i = 1; i < sizeof(lanes) / sizeof(lanes[0]); i++) {
 		Lane* lane = new Lane(i);
 		lanes[i] = lane;
         if (i == 1) {
-			lane->spawnX = 475.0f;
-			lane->spawnY = 283.5f;
+			lane->spawnX = halfScreenWidth - noteDistance / 2;
+			lane->spawnY = halfScreenHeight - heightComp;
             lane->angle = 150.0;
         }
         else if (i == 2) {
-            lane->spawnX = 725.0f;
-            lane->spawnY = 283.5f;
+            lane->spawnX = halfScreenWidth + noteDistance / 2;
+            lane->spawnY = halfScreenHeight - heightComp;
             lane->angle = 210.0;
         }
         else if (i == 3) {
-            lane->spawnX = 350.0f;
-            lane->spawnY = 500.0f;
+            lane->spawnX = halfScreenWidth - noteDistance;
+            lane->spawnY = halfScreenHeight;
             lane->angle = 90.0;
         }
         else if (i == 4) {
-            lane->spawnX = 850.0f;
-            lane->spawnY = 500.0f;
+            lane->spawnX = halfScreenWidth + noteDistance;
+            lane->spawnY = halfScreenHeight;
             lane->angle = 270.0;
         }
         else if (i == 5) {
-            lane->spawnX = 475.0f;
-            lane->spawnY = 716.5f;
+            lane->spawnX = halfScreenWidth - noteDistance / 2;
+            lane->spawnY = halfScreenHeight + heightComp;
             lane->angle = 30.0;
         }
         else if (i == 6) {
-            lane->spawnX = 725.0f;
-            lane->spawnY = 716.5f;
+            lane->spawnX = halfScreenWidth + noteDistance / 2;
+            lane->spawnY = halfScreenHeight + heightComp;
             lane->angle = 330.0;
         }
 		cout << "Lane " << i << " created. With an angle of " << lane->angle << endl;
 	}
-	//temporary create notes for testing
-    Note* note = new Note();
-    note->lane = 1;
-    lanes[note->lane]->notes.push_back(note);
-    note = new Note();
-    note->lane = 1;
-    lanes[note->lane]->notes.push_back(note);
 }
 
 void Beatcounter::StartBeatCounter(Beatcounter* beatcounter) {
@@ -260,7 +255,7 @@ void Beatgame::Render() { //Create the window and draw the game over text if the
     SDL_RenderClear(renderer);
     
     for (int i = 1; i <= 6 ; i++) {
-        lanes[i]->Render(renderer, beatTexture, lanes[i]->angle);
+        lanes[i]->Render(renderer, beatTexture);
 	}
 
     if (gameOver) {
@@ -274,10 +269,17 @@ void Beatgame::Render() { //Create the window and draw the game over text if the
     SDL_RenderPresent(renderer);
 }
 
-void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture, double angle) { //Render the notes in the lane
+void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture) { //Render the notes in the lane
     for (Note* note : notes) {
         SDL_FRect destination = { note->noteX, note->noteY, note->noteWidth, note->noteHeight };
         SDL_RenderTextureRotated(renderer, texture, NULL, &destination, angle, NULL, SDL_FLIP_NONE);
+
+		float dx = 600.0f - note->noteX;
+		float dy = 500.0f - note->noteY;
+		float angleOfTravel = atan2(dy, dx);
+
+        note->noteX += cos(angleOfTravel) * note->speed;
+        note->noteY += sin(angleOfTravel) * note->speed;
     }
 }
 
