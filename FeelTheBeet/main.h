@@ -22,6 +22,7 @@ public:
 	void Render();
 	bool IsRunning() const;
 	SDL_Texture* beatTexture;
+	float score = 0;
 private:
 	const int screenWidth = 1200;
 	const int screenHeight = 1000;
@@ -69,7 +70,7 @@ public:
 	float spawnX;
 	float spawnY;
 	double angle;
-	void HitNote();
+	float HitNote();
 	void CreateNote(chrono::steady_clock::time_point hitTime);
 	void CheckNotes();
 	void Render(SDL_Renderer* renderer, SDL_Texture* texture);

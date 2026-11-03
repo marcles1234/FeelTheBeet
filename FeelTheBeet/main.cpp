@@ -198,22 +198,22 @@ void Beatgame::HandleInput() { //Check for input events
                 if (!gameOver) {
 					switch (event.key.key) { //Individual key presses
                         case SDLK_W:
-                            lanes[1]->HitNote();
+                            score += lanes[1]->HitNote();
 					        break;
                         case SDLK_E:
-                            lanes[2]->HitNote();
+                            score += lanes[2]->HitNote();
                             break;
                         case SDLK_A:
-                            lanes[3]->HitNote();
+                            score += lanes[3]->HitNote();
                             break;
                         case SDLK_D:
                             lanes[4]->HitNote();
                             break;
                         case SDLK_Z:
-                            lanes[5]->HitNote();
+                            score += lanes[5]->HitNote();
                             break;
                         case SDLK_X:
-                            lanes[6]->HitNote();
+                            score += lanes[6]->HitNote();
                             break;
                     }
                 }
@@ -225,29 +225,37 @@ void Beatgame::HandleInput() { //Check for input events
     }
 }
 
-void Lane::HitNote() { //Check if a note is in the lane and remove it if it is
+float Lane::HitNote() { //Check if a note is in the lane and remove it if it is
 	cout << "Lane " << laneID << " hit" << endl;
     if (!notes.empty()) {
-        notes.front()->Hit();
+        float score = notes.front()->Hit();
+		cout << "Added score: " << score << endl;
 		delete notes.front(); // Delete the note object to free memory
 		notes.pop_front(); // Remove the note from the lanes list
+        return score;
     }
-	//CheckNotes(); //Display how many notes are in the lane after hitting a note
 }
 
 float Note::Hit() {
 	chrono::steady_clock::time_point timeOfHit = chrono::steady_clock::now();
     auto timeDifference = chrono::duration_cast<chrono::milliseconds>(timeOfHit - hitTime).count();
     if (timeDifference < -200) { //EARLY
-        auto timeDifference = chrono::duration_cast<chrono::milliseconds>(hitTime - timeOfHit).count();
         cout << "Note hit early by " << timeDifference << " milliseconds" << endl;
+        if (timeDifference > -300 ) {
+			timeDifference = (timeDifference * -1) - 200;
+            return 10 - (timeDifference / 10);
+		}
     } else if (timeDifference > 200) { //LATE
-        auto timeDifference = chrono::duration_cast<chrono::milliseconds>(timeOfHit - hitTime).count();
         cout << "Note hit late by " << timeDifference << " milliseconds" << endl;
-	} else { //WITHIN 100ms OF HIT TIME
+        if (timeDifference < 300) {
+			timeDifference = timeDifference - 200;
+            return 10 - (timeDifference / 10);
+        }
+	} else { //WITHIN 200ms OF HIT TIME
         cout << "Note hit perfectly on time!" << endl;
+        return 10;
 	}
-    return 0.0f;
+    return 0;
 }
 
 void Lane::CreateNote(chrono::steady_clock::time_point hitTime) { //Create a note in the lane
@@ -285,9 +293,9 @@ void Beatgame::Render() { //Create the window and draw the game over text if the
 
 void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture) { //Render the notes in the lane
     for (Note* note : notes) {
-        SDL_FRect destination = { note->noteX, note->noteY, note->noteWidth, note->noteHeight };
+        SDL_FRect destination = { note->noteX, note->noteY, note->noteWidth, note->noteHeight }; //Set the destination
         
-        if (note->temp() == 0) {
+        if (note->temp() == 0) { //Determine note colour
             SDL_SetTextureColorMod(texture, 234, 28, 28);
 		}
 		else if (note->temp() == 1) {
@@ -296,8 +304,10 @@ void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture) { //Render the n
         else if (note->temp() == 2) {
             SDL_SetTextureColorMod(texture, 56, 234, 26);
         }
-        SDL_RenderTextureRotated(renderer, texture, NULL, &destination, angle, NULL, SDL_FLIP_NONE);
-		float dx = 600.0f - note->noteX;
+
+        SDL_RenderTextureRotated(renderer, texture, NULL, &destination, angle, NULL, SDL_FLIP_NONE); //Render the note
+
+		float dx = 600.0f - note->noteX; //Calculate the angle of travel towards the center of the screen
 		float dy = 500.0f - note->noteY;
 		float angleOfTravel = atan2(dy, dx);
 
