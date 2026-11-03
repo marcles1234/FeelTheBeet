@@ -106,12 +106,23 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
     }
     SDL_DestroySurface(surface);
 
-    textSurface = TTF_RenderText_Shaded(font, "Score", 0, foregroundColor, backgroundColor);
+    SDL_Surface* backSurface = IMG_Load("Honeycomb.png");
+    if (!backSurface) {
+        cerr << "Couldn't load image: " << SDL_GetError() << endl;
+        return;
+    }
+    backgroundTexture = SDL_CreateTextureFromSurface(renderer, backSurface);
+    if (!beatTexture) {
+        cerr << "Couldn't create texture: " << SDL_GetError() << endl;
+        return;
+    }
+    SDL_DestroySurface(backSurface);
+
+    textSurface = TTF_RenderText_Shaded(font, "Score: 0", 0, foregroundColor, backgroundColor);
     if (!textSurface) {
         cerr << "Couldn't load text: " << SDL_GetError() << endl;
         return;
     }
-    UpdateScore();
     textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
     if (!beatTexture) {
         cerr << "Couldn't create texture: " << SDL_GetError() << endl;
@@ -148,7 +159,7 @@ void Beatgame::InitialiseGame() { //Create lanes
         }
         else if (i == 4) {
             lane->spawnX = halfScreenWidth + noteDistance;
-            lane->spawnY = halfScreenHeight;
+            lane->spawnY = halfScreenHeight - 50;
             lane->angle = 270.0;
         }
         else if (i == 5) {
@@ -296,6 +307,8 @@ void Beatgame::UpdateScore() { //Update the score text
 void Beatgame::Render() { //Create the window and draw the game over text if the game is over
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
+
+	SDL_RenderTexture(renderer, backgroundTexture, NULL, NULL);
     
     for (int i = 1; i <= 6 ; i++) {
         lanes[i]->Render(renderer, beatTexture);
@@ -393,7 +406,11 @@ void Beatgame::Cleanup() { //Called when game is over, cleans up SDL and TTF lib
     if (textTexture) {
         SDL_DestroyTexture(textTexture);
         textTexture = nullptr;
-	}
+    }
+    if (backgroundTexture) {
+        SDL_DestroyTexture(backgroundTexture);
+        backgroundTexture = nullptr;
+    }
     TTF_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

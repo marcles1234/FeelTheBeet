@@ -25,6 +25,7 @@ public:
 	void UpdateScore();
 	SDL_Texture* beatTexture;
 	SDL_Texture* textTexture;
+	SDL_Texture* backgroundTexture;
 	SDL_Surface* textSurface;
 	SDL_FRect textLocation;
 	string scoreText;
@@ -34,7 +35,7 @@ private:
 	const int screenHeight = 1000;
 	const int halfScreenWidth = screenWidth / 2;
 	const int halfScreenHeight = screenHeight / 2;
-	const int noteDistance = 400;
+	const int noteDistance = 450;
 	const int fontSize = 72;
 	SDL_Window* window;
 	SDL_Renderer* renderer;
