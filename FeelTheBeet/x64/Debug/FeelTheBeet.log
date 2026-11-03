@@ -1,33 +1,31 @@
 ﻿  main.cpp
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(42,17): warning C4804: '<': unsafe use of type 'bool' in operation
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(47,23): warning C4806: '==': unsafe operation: no value of type 'bool' promoted to type 'int' can equal the given constant
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(64,45): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(117,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(122,35): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(127,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(132,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(133,28): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(137,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(138,28): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(142,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(147,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(246,23): warning C4244: 'return': conversion from '_Rep' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(246,23): warning C4244:         with
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(246,23): warning C4244:         [
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(246,23): warning C4244:             _Rep=__int64
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(246,23): warning C4244:         ]
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(252,23): warning C4244: 'return': conversion from '_Rep' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(252,23): warning C4244:         with
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(252,23): warning C4244:         [
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(252,23): warning C4244:             _Rep=__int64
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(252,23): warning C4244:         ]
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(286,42): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(286,42): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(286,59): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(286,59): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(286,64): warning C4838: conversion from 'const int' to 'float' requires a narrowing conversion
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(286,64): warning C4244: 'initializing': conversion from 'const int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(286,74): warning C4838: conversion from 'const int' to 'float' requires a narrowing conversion
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(286,74): warning C4244: 'initializing': conversion from 'const int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(237,1): warning C4715: 'Lane::HitNote': not all control paths return a value
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(64,55): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(130,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(135,35): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(140,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(145,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(146,28): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(150,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(151,28): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(155,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(160,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(214,55): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(217,55): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(220,55): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(223,55): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(226,55): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(229,55): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(305,42): warning C4838: conversion from 'const int' to 'float' requires a narrowing conversion
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(305,42): warning C4244: 'initializing': conversion from 'const int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(312,42): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(312,42): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(312,59): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(312,59): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(312,64): warning C4838: conversion from 'const int' to 'float' requires a narrowing conversion
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(312,64): warning C4244: 'initializing': conversion from 'const int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(312,74): warning C4838: conversion from 'const int' to 'float' requires a narrowing conversion
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(312,74): warning C4244: 'initializing': conversion from 'const int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(251,1): warning C4715: 'Lane::HitNote': not all control paths return a value
   FeelTheBeet.vcxproj -> C:\Users\marci\source\repos\FeelTheBeet\x64\Debug\FeelTheBeet.exe

@@ -5,6 +5,7 @@
 #include <chrono>
 #include <thread>
 #include <random>
+#include <string>
 
 using namespace std;
 #include "SDL3/SDL.h"
@@ -21,8 +22,13 @@ public:
 	void Update();
 	void Render();
 	bool IsRunning() const;
+	void UpdateScore();
 	SDL_Texture* beatTexture;
-	float score = 0;
+	SDL_Texture* textTexture;
+	SDL_Surface* textSurface;
+	SDL_FRect textLocation;
+	string scoreText;
+	int score = 0;
 private:
 	const int screenWidth = 1200;
 	const int screenHeight = 1000;
@@ -35,7 +41,8 @@ private:
 	TTF_Font* font;
 	bool isRunning;
 	bool gameOver;
-	SDL_Color textColor = { 255, 0, 0, 255 };
+	SDL_Color backgroundColor = { 255, 255, 255, 255 };
+	SDL_Color foregroundColor = { 0, 0, 0, 255 };
 };
 
 class Note {

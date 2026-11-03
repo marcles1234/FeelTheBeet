@@ -61,7 +61,7 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
         isRunning = false;
         return;
     }
-    font = TTF_OpenFont("Freedom-10eM.ttf", fontSize);
+    font = TTF_OpenFont("C:/Windows/Fonts/arial.ttf", fontSize);
     if (font == nullptr) {
         cerr << "Font cannot be loaded! TTF_ERROR: " << SDL_GetError() << endl;
         isRunning = false;
@@ -105,6 +105,19 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
         return;
     }
     SDL_DestroySurface(surface);
+
+    textSurface = TTF_RenderText_Shaded(font, "Score", 0, foregroundColor, backgroundColor);
+    if (!textSurface) {
+        cerr << "Couldn't load text: " << SDL_GetError() << endl;
+        return;
+    }
+    UpdateScore();
+    textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+    if (!beatTexture) {
+        cerr << "Couldn't create texture: " << SDL_GetError() << endl;
+        return;
+    }
+    SDL_DestroySurface(textSurface);
 
     //Set up key presses
     for (int i = 0; i < 322; i++) { // init them all to false
@@ -207,7 +220,7 @@ void Beatgame::HandleInput() { //Check for input events
                             score += lanes[3]->HitNote();
                             break;
                         case SDLK_D:
-                            lanes[4]->HitNote();
+                            score += lanes[4]->HitNote();
                             break;
                         case SDLK_Z:
                             score += lanes[5]->HitNote();
@@ -216,6 +229,7 @@ void Beatgame::HandleInput() { //Check for input events
                             score += lanes[6]->HitNote();
                             break;
                     }
+                    UpdateScore();
                 }
                 break;
 	        case SDL_EVENT_KEY_UP:
@@ -243,19 +257,19 @@ float Note::Hit() {
         cout << "Note hit early by " << timeDifference << " milliseconds" << endl;
         if (timeDifference > -300 ) {
 			timeDifference = (timeDifference * -1) - 200;
-            return 10 - (timeDifference / 10);
+            return 10.0f - (timeDifference / 10);
 		}
     } else if (timeDifference > 200) { //LATE
         cout << "Note hit late by " << timeDifference << " milliseconds" << endl;
         if (timeDifference < 300) {
 			timeDifference = timeDifference - 200;
-            return 10 - (timeDifference / 10);
+            return 10.0f - (timeDifference / 10);
         }
 	} else { //WITHIN 200ms OF HIT TIME
         cout << "Note hit perfectly on time!" << endl;
-        return 10;
+        return 10.0f;
 	}
-    return 0;
+    return 0.0f;
 }
 
 void Lane::CreateNote(chrono::steady_clock::time_point hitTime) { //Create a note in the lane
@@ -272,6 +286,13 @@ void Lane::CheckNotes() { //Check all notes in a lane
 	cout << "There are " << notes.size() << " notes in lane " << laneID << endl;
 }
 
+void Beatgame::UpdateScore() { //Update the score text
+    scoreText = "Score: " + to_string(score);
+    textSurface = TTF_RenderText_Shaded(font, scoreText.c_str(), 0, foregroundColor, backgroundColor);
+	textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+    SDL_DestroySurface(textSurface);
+}
+
 void Beatgame::Render() { //Create the window and draw the game over text if the game is over
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
@@ -279,9 +300,14 @@ void Beatgame::Render() { //Create the window and draw the game over text if the
     for (int i = 1; i <= 6 ; i++) {
         lanes[i]->Render(renderer, beatTexture);
 	}
+    
+    if (textTexture) {
+        SDL_FRect textRect{ 50, 50, 200, fontSize };
+        SDL_RenderTexture(renderer, textTexture, NULL, &textRect);
+	}
 
     if (gameOver) {
-        SDL_Surface* surface = TTF_RenderText_Solid(font, "GameOver", 0, textColor);
+        SDL_Surface* surface = TTF_RenderText_Solid(font, "GameOver", 0, foregroundColor);
         SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
         SDL_FRect textRect{ screenHeight / 2, screenWidth / 2, fontSize, fontSize };
         SDL_RenderTexture(renderer, texture, NULL, &textRect);
@@ -364,6 +390,10 @@ void Beatgame::Cleanup() { //Called when game is over, cleans up SDL and TTF lib
         SDL_DestroyTexture(beatTexture);
         beatTexture = nullptr;
     }
+    if (textTexture) {
+        SDL_DestroyTexture(textTexture);
+        textTexture = nullptr;
+	}
     TTF_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
