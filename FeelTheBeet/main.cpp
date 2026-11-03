@@ -159,7 +159,7 @@ void Beatgame::InitialiseGame() { //Create lanes
         }
         else if (i == 4) {
             lane->spawnX = halfScreenWidth + noteDistance;
-            lane->spawnY = halfScreenHeight - 50;
+            lane->spawnY = halfScreenHeight;
             lane->angle = 270.0;
         }
         else if (i == 5) {
@@ -346,8 +346,8 @@ void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture) { //Render the n
 
         SDL_RenderTextureRotated(renderer, texture, NULL, &destination, angle, NULL, SDL_FLIP_NONE); //Render the note
 
-		float dx = 600.0f - note->noteX; //Calculate the angle of travel towards the center of the screen
-		float dy = 500.0f - note->noteY;
+		float dx = 550.0f - note->noteX; //Calculate the angle of travel towards the center of the screen
+		float dy = 450.0f - note->noteY;
 		float angleOfTravel = atan2(dy, dx);
 
         note->noteX += cos(angleOfTravel) * note->speed;

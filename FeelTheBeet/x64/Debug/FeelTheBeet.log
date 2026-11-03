@@ -1,4 +1,10 @@
 ﻿  main.cpp
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.h(36,48): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
+  (compiling source file 'main.cpp')
+  
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.h(37,50): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
+  (compiling source file 'main.cpp')
+  
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(42,17): warning C4804: '<': unsafe use of type 'bool' in operation
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(47,23): warning C4806: '==': unsafe operation: no value of type 'bool' promoted to type 'int' can equal the given constant
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(64,55): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
@@ -8,7 +14,7 @@ C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(151,44): warning C4
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(156,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(157,28): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(161,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(162,45): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(162,28): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(166,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(171,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(225,55): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data

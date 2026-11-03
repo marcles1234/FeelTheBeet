@@ -33,8 +33,8 @@ public:
 private:
 	const int screenWidth = 1200;
 	const int screenHeight = 1000;
-	const int halfScreenWidth = screenWidth / 2;
-	const int halfScreenHeight = screenHeight / 2;
+	const int halfScreenWidth = (screenWidth / 2) - 50.0f;
+	const int halfScreenHeight = (screenHeight / 2) - 50.0f;
 	const int noteDistance = 450;
 	const int fontSize = 72;
 	SDL_Window* window;
