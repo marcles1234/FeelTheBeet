@@ -51,6 +51,7 @@ public:
 	float Hit();
 	void Turnback();
 	bool isExpired();
+	int temp();
 private:
 	float timeAlive;
 };

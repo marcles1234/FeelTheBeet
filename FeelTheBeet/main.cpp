@@ -4,7 +4,6 @@
 
 bool KEYS[322];
 Lane* lanes[7];
-int temp = 100; //DELETE ONCE NOTE SPAWNING IS IMPLEMENTED
 
 static SDL_AudioStream* stream = NULL;
 static Uint8* wav_data = NULL;
@@ -238,10 +237,11 @@ void Lane::HitNote() { //Check if a note is in the lane and remove it if it is
 
 float Note::Hit() {
 	chrono::steady_clock::time_point timeOfHit = chrono::steady_clock::now();
-    if (timeOfHit < hitTime - chrono::milliseconds(100)) { //EARLY
+    auto timeDifference = chrono::duration_cast<chrono::milliseconds>(timeOfHit - hitTime).count();
+    if (timeDifference < -200) { //EARLY
         auto timeDifference = chrono::duration_cast<chrono::milliseconds>(hitTime - timeOfHit).count();
         cout << "Note hit early by " << timeDifference << " milliseconds" << endl;
-    } else if (timeOfHit > hitTime + chrono::milliseconds(100)) { //LATE
+    } else if (timeDifference > 200) { //LATE
         auto timeDifference = chrono::duration_cast<chrono::milliseconds>(timeOfHit - hitTime).count();
         cout << "Note hit late by " << timeDifference << " milliseconds" << endl;
 	} else { //WITHIN 100ms OF HIT TIME
@@ -256,7 +256,6 @@ void Lane::CreateNote(chrono::steady_clock::time_point hitTime) { //Create a not
     note->hitTime = hitTime;
 	note->noteX = spawnX; // Set the X position based on the lane ID
     note->noteY = spawnY;
-    temp += 10;
 	notes.push_back(note);
 	//cout << "Note in lane " << note->lane << " created" << endl;
 }
@@ -287,8 +286,17 @@ void Beatgame::Render() { //Create the window and draw the game over text if the
 void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture) { //Render the notes in the lane
     for (Note* note : notes) {
         SDL_FRect destination = { note->noteX, note->noteY, note->noteWidth, note->noteHeight };
+        
+        if (note->temp() == 0) {
+            SDL_SetTextureColorMod(texture, 234, 28, 28);
+		}
+		else if (note->temp() == 1) {
+            SDL_SetTextureColorMod(texture, 234, 187, 27);
+        }
+        else if (note->temp() == 2) {
+            SDL_SetTextureColorMod(texture, 56, 234, 26);
+        }
         SDL_RenderTextureRotated(renderer, texture, NULL, &destination, angle, NULL, SDL_FLIP_NONE);
-
 		float dx = 600.0f - note->noteX;
 		float dy = 500.0f - note->noteY;
 		float angleOfTravel = atan2(dy, dx);
@@ -302,6 +310,21 @@ bool Note::isExpired() { //Check if the note has expired and remove it if it has
     auto now = chrono::steady_clock::now();
     auto elapsed = chrono::duration_cast<chrono::milliseconds>(now - hitTime).count();
     return elapsed > lingerTime;
+}
+
+int Note::temp() { //Used for debugging, returns the time since the note was created
+    chrono::steady_clock::time_point timeOfHit = chrono::steady_clock::now();
+	auto timeDifference = chrono::duration_cast<chrono::milliseconds>(timeOfHit - hitTime).count();
+    if (timeDifference < -200) { //EARLY
+        return 0;
+    }
+    else if (timeDifference > 200) { //LATE
+        return 2;
+    }
+    else { //WITHIN 200ms OF HIT TIME
+        return 1;
+    }
+    return 3;
 }
 
 bool Beatgame::IsRunning() const { //Used in main() to check if the game is running
