@@ -48,7 +48,7 @@ public:
 	float noteWidth = 100.0f;
 	float noteHeight = 100.0f;
 	void Move();
-	int Hit();
+	float Hit();
 	void Turnback();
 	bool isExpired();
 private:

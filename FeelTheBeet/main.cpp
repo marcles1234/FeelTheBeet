@@ -229,10 +229,25 @@ void Beatgame::HandleInput() { //Check for input events
 void Lane::HitNote() { //Check if a note is in the lane and remove it if it is
 	cout << "Lane " << laneID << " hit" << endl;
     if (!notes.empty()) {
+        notes.front()->Hit();
 		delete notes.front(); // Delete the note object to free memory
 		notes.pop_front(); // Remove the note from the lanes list
     }
-    CheckNotes();
+	//CheckNotes(); //Display how many notes are in the lane after hitting a note
+}
+
+float Note::Hit() {
+	chrono::steady_clock::time_point timeOfHit = chrono::steady_clock::now();
+    if (timeOfHit < hitTime - chrono::milliseconds(100)) { //EARLY
+        auto timeDifference = chrono::duration_cast<chrono::milliseconds>(hitTime - timeOfHit).count();
+        cout << "Note hit early by " << timeDifference << " milliseconds" << endl;
+    } else if (timeOfHit > hitTime + chrono::milliseconds(100)) { //LATE
+        auto timeDifference = chrono::duration_cast<chrono::milliseconds>(timeOfHit - hitTime).count();
+        cout << "Note hit late by " << timeDifference << " milliseconds" << endl;
+	} else { //WITHIN 100ms OF HIT TIME
+        cout << "Note hit perfectly on time!" << endl;
+	}
+    return 0.0f;
 }
 
 void Lane::CreateNote(chrono::steady_clock::time_point hitTime) { //Create a note in the lane
@@ -243,7 +258,7 @@ void Lane::CreateNote(chrono::steady_clock::time_point hitTime) { //Create a not
     note->noteY = spawnY;
     temp += 10;
 	notes.push_back(note);
-	cout << "Note in lane " << note->lane << " created" << endl;
+	//cout << "Note in lane " << note->lane << " created" << endl;
 }
 
 void Lane::CheckNotes() { //Check all notes in a lane
