@@ -7,7 +7,7 @@ C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.h(39,50): warning C4244
   
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(47,17): warning C4804: '<': unsafe use of type 'bool' in operation
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(52,23): warning C4806: '==': unsafe operation: no value of type 'bool' promoted to type 'int' can equal the given constant
-C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(72,55): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(72,52): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(149,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(154,35): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 C:\Users\marci\source\repos\FeelTheBeet\FeelTheBeet\main.cpp(159,44): warning C4244: '=': conversion from 'int' to 'float', possible loss of data

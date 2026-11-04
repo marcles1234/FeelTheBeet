@@ -44,8 +44,8 @@ private:
 	TTF_Font* font;
 	bool isRunning;
 	bool gameOver;
-	SDL_Color backgroundColor = { 255, 255, 255, 255 };
-	SDL_Color foregroundColor = { 0, 0, 0, 255 };
+	SDL_Color backgroundColor = { 255, 255, 255, 0 };
+	SDL_Color foregroundColor = { 73, 53, 22, 255 };
 };
 
 class Note {

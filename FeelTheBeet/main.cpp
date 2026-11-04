@@ -69,7 +69,7 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
 
 	SDL_SetRenderVSync(renderer, 1); //Enble VSync to limit framerate to monitor refresh rate
 
-    font = TTF_OpenFont("C:/Windows/Fonts/arial.ttf", fontSize);
+    font = TTF_OpenFont("BagelFatOne-Regular.ttf", fontSize);
     if (font == nullptr) {
         cerr << "Font cannot be loaded! TTF_ERROR: " << SDL_GetError() << endl;
         isRunning = false;
