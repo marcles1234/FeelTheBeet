@@ -6,6 +6,7 @@
 #include <thread>
 #include <random>
 #include <string>
+#include <iomanip>
 
 using namespace std;
 #include "SDL3/SDL.h"
@@ -30,6 +31,7 @@ public:
 	SDL_FRect textLocation;
 	string scoreText;
 	int score = 0;
+	float deltaTime = 0.0f;
 private:
 	const int screenWidth = 1200;
 	const int screenHeight = 1000;
@@ -49,8 +51,8 @@ private:
 class Note {
 public:
 	int lane;
-	float lingerTime = 1000.0f;
-	float speed = 0.05f;
+	float lingerTime = 800.0f;
+	float speed = 150.0f;
 	chrono::steady_clock::time_point hitTime;
 	float noteX;
 	float noteY;
@@ -81,7 +83,7 @@ public:
 	float HitNote();
 	void CreateNote(chrono::steady_clock::time_point hitTime);
 	void CheckNotes();
-	void Render(SDL_Renderer* renderer, SDL_Texture* texture);
+	void Render(SDL_Renderer* renderer, SDL_Texture* texture, float deltaTime);
 	void Update();
 };
 

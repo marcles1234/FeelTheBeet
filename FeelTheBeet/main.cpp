@@ -23,7 +23,12 @@ int main(int argc, char* argv[])
 
 	thread beatThread(&Beatcounter::StartBeatCounter, &beatcounter, &beatcounter);
 
+    Uint64 lastTime = SDL_GetPerformanceCounter();
 	while(game.IsRunning()) {
+		Uint64 currentTime = SDL_GetPerformanceCounter();
+        game.deltaTime = (float)(currentTime - lastTime) / (float)SDL_GetPerformanceFrequency();
+        lastTime = currentTime;
+
 		game.HandleInput();
 		game.Update();
 		game.Render();
@@ -61,6 +66,9 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
         isRunning = false;
         return;
     }
+
+	SDL_SetRenderVSync(renderer, 1); //Enble VSync to limit framerate to monitor refresh rate
+
     font = TTF_OpenFont("C:/Windows/Fonts/arial.ttf", fontSize);
     if (font == nullptr) {
         cerr << "Font cannot be loaded! TTF_ERROR: " << SDL_GetError() << endl;
@@ -172,7 +180,6 @@ void Beatgame::InitialiseGame() { //Create lanes
             lane->spawnY = halfScreenHeight + heightComp;
             lane->angle = 330.0;
         }
-		cout << "Lane " << i << " created. With an angle of " << lane->angle << endl;
 	}
 }
 
@@ -251,10 +258,8 @@ void Beatgame::HandleInput() { //Check for input events
 }
 
 float Lane::HitNote() { //Check if a note is in the lane and remove it if it is
-	cout << "Lane " << laneID << " hit" << endl;
     if (!notes.empty()) {
         float score = notes.front()->Hit();
-		cout << "Added score: " << score << endl;
 		delete notes.front(); // Delete the note object to free memory
 		notes.pop_front(); // Remove the note from the lanes list
         return score;
@@ -290,7 +295,6 @@ void Lane::CreateNote(chrono::steady_clock::time_point hitTime) { //Create a not
 	note->noteX = spawnX; // Set the X position based on the lane ID
     note->noteY = spawnY;
 	notes.push_back(note);
-	//cout << "Note in lane " << note->lane << " created" << endl;
 }
 
 void Lane::CheckNotes() { //Check all notes in a lane
@@ -311,7 +315,7 @@ void Beatgame::Render() { //Create the window and draw the game over text if the
 	SDL_RenderTexture(renderer, backgroundTexture, NULL, NULL);
     
     for (int i = 1; i <= 6 ; i++) {
-        lanes[i]->Render(renderer, beatTexture);
+        lanes[i]->Render(renderer, beatTexture, deltaTime);
 	}
     
     if (textTexture) {
@@ -330,7 +334,7 @@ void Beatgame::Render() { //Create the window and draw the game over text if the
     SDL_RenderPresent(renderer);
 }
 
-void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture) { //Render the notes in the lane
+void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture, float deltaTime) { //Render the notes in the lane
     for (Note* note : notes) {
         SDL_FRect destination = { note->noteX, note->noteY, note->noteWidth, note->noteHeight }; //Set the destination
         
@@ -350,8 +354,9 @@ void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture) { //Render the n
 		float dy = 450.0f - note->noteY;
 		float angleOfTravel = atan2(dy, dx);
 
-        note->noteX += cos(angleOfTravel) * note->speed;
-        note->noteY += sin(angleOfTravel) * note->speed;
+		cout << deltaTime << endl;
+        note->noteX += cos(angleOfTravel) * note->speed * deltaTime;
+        note->noteY += sin(angleOfTravel) * note->speed * deltaTime;
     }
 }
 
