@@ -102,7 +102,7 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
         return;
     }
 
-	SDL_Surface* surface = IMG_Load("triangle.png");
+	SDL_Surface* surface = IMG_Load("Bee-pollen.png");
     if (!surface) {
         cerr << "Couldn't load image: " << SDL_GetError() << endl;
         return;
@@ -113,6 +113,17 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
         return;
     }
     SDL_DestroySurface(surface);
+    SDL_Surface* surface1 = IMG_Load("Bee-nopollen.png");
+    if (!surface1) {
+        cerr << "Couldn't load image: " << SDL_GetError() << endl;
+        return;
+    }
+    beatTextureEmpty = SDL_CreateTextureFromSurface(renderer, surface1);
+    if (!beatTextureEmpty) {
+        cerr << "Couldn't create texture: " << SDL_GetError() << endl;
+        return;
+    }
+    SDL_DestroySurface(surface1);
 
     SDL_Surface* backSurface = IMG_Load("Honeycomb.png");
     if (!backSurface) {
@@ -317,7 +328,7 @@ void Beatgame::Render() { //Create the window and draw the game over text if the
 	SDL_RenderTexture(renderer, backgroundTexture, NULL, NULL);
     
     for (int i = 1; i <= 6 ; i++) {
-        lanes[i]->Render(renderer, beatTexture, deltaTime);
+        lanes[i]->Render(renderer, beatTexture, beatTextureEmpty, deltaTime);
 	}
     
     if (textTexture) {
@@ -336,30 +347,31 @@ void Beatgame::Render() { //Create the window and draw the game over text if the
     SDL_RenderPresent(renderer);
 }
 
-void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture, float deltaTime) { //Render the notes in the lane
+void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Texture* textureEmpty, float deltaTime) { //Render the notes in the lane
     for (Note* note : notes) {
         SDL_FRect destination = { note->noteX, note->noteY, note->noteWidth, note->noteHeight }; //Set the destination
         
         if (note->temp() == 0) { //Determine note colour
-            SDL_SetTextureColorMod(texture, 234, 28, 28);
+            SDL_RenderTextureRotated(renderer, textureEmpty, NULL, &destination, note->angle, NULL, SDL_FLIP_NONE);
 		}
 		else if (note->temp() == 1) {
-            SDL_SetTextureColorMod(texture, 234, 187, 27);
+            SDL_RenderTextureRotated(renderer, texture, NULL, &destination, note->angle, NULL, SDL_FLIP_NONE);
             note->speed = 0.0f;
         }
         else if (note->temp() == 2) {
-            SDL_SetTextureColorMod(texture, 56, 234, 26);
             if (!note->turnBack) {
                 note->turnBack = true;
                 note->angle -= 180.0f;
                 note->speed = -note->speedStorage;
             }
+            SDL_RenderTextureRotated(renderer, textureEmpty, NULL, &destination, note->angle, NULL, SDL_FLIP_NONE);
+        }
+        else {
+            SDL_RenderTextureRotated(renderer, texture, NULL, &destination, note->angle, NULL, SDL_FLIP_NONE);
         }
 
-        SDL_RenderTextureRotated(renderer, texture, NULL, &destination, note->angle, NULL, SDL_FLIP_NONE); //Render the note
-
-		float dx = 550.0f - note->noteX; //Calculate the angle of travel towards the center of the screen
-		float dy = 450.0f - note->noteY;
+		float dx = 525.0f - note->noteX; //Calculate the angle of travel towards the center of the screen
+		float dy = 425.0f - note->noteY;
 		float angleOfTravel = atan2(dy, dx);
 
         note->noteX += cos(angleOfTravel) * note->speed * deltaTime;

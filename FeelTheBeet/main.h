@@ -25,6 +25,7 @@ public:
 	bool IsRunning() const;
 	void UpdateScore();
 	SDL_Texture* beatTexture;
+	SDL_Texture* beatTextureEmpty;
 	SDL_Texture* textTexture;
 	SDL_Texture* backgroundTexture;
 	SDL_Surface* textSurface;
@@ -35,8 +36,8 @@ public:
 private:
 	const int screenWidth = 1200;
 	const int screenHeight = 1000;
-	const int halfScreenWidth = (screenWidth / 2) - 50.0f;
-	const int halfScreenHeight = (screenHeight / 2) - 50.0f;
+	const int halfScreenWidth = (screenWidth / 2) - 75.0f;
+	const int halfScreenHeight = (screenHeight / 2) - 75.0f;
 	const int noteDistance = 450;
 	const int fontSize = 72;
 	SDL_Window* window;
@@ -52,13 +53,13 @@ class Note {
 public:
 	int lane;
 	float lingerTime = 1200.0f;
-	float speed = 210.0f;
+	float speed = 200.0f;
 	float speedStorage = 0.0f;
 	chrono::steady_clock::time_point hitTime;
 	float noteX;
 	float noteY;
-	float noteWidth = 100.0f;
-	float noteHeight = 100.0f;
+	float noteWidth = 150.0f;
+	float noteHeight = 150.0f;
 	bool turnBack = false;
 	double angle;
 	void Move();
@@ -85,7 +86,7 @@ public:
 	float HitNote();
 	void CreateNote(chrono::steady_clock::time_point hitTime);
 	void CheckNotes();
-	void Render(SDL_Renderer* renderer, SDL_Texture* texture, float deltaTime);
+	void Render(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Texture* textureEmpty, float deltaTime);
 	void Update();
 };
 
