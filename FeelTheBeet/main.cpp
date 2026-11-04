@@ -1,7 +1,6 @@
 // Test song bpm = 106 -> 1.766 bps -> 0.566 seconds per beat
 
 /*---TODO---
-- Add player in the middle
 - Add entry screen
 - Input/sound offset
 - New song
@@ -19,7 +18,27 @@ static Uint32 wav_data_len = 0;
 int main(int argc, char* argv[])
 {
     Beatgame game;
-	game.InitialiseSDL();
+    game.InitialiseSDL();
+
+    if (!game.isRunning) {
+        game.Cleanup();
+        return 1;
+    }
+
+    Menu menu;
+    menu.InitialiseMenu(game.window);
+
+    while (menu.textInputActive && game.isRunning) {
+       
+		menu.HandleInput();
+		menu.Render(&game);
+    }
+
+    if (!game.isRunning) {
+        game.Cleanup();
+        return 0;
+    }
+
     game.InitialiseGame();
 
     Beatcounter beatcounter;
@@ -47,6 +66,8 @@ int main(int argc, char* argv[])
 }
 
 Beatgame::Beatgame() : isRunning(true), gameOver(false), window(nullptr), renderer(nullptr), font(nullptr) {};
+
+Menu::Menu() : textInputActive(false), offset(0), window(nullptr) {};
 
 void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window and renderer, load font and .wav file, set the metadata
     SDL_SetAppMetadata("Beet Game", "1.0", "com.example.beetgame");
@@ -175,6 +196,41 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
     }
 }
 
+void Menu::InitialiseMenu(SDL_Window* gameWindow) {
+    offsetText = to_string(offset);
+    textInputActive = true;
+    SDL_StartTextInput(gameWindow);
+}
+
+void Menu::Render(Beatgame* game) {
+    // Render menu
+    SDL_SetRenderDrawColor(game->renderer, 30, 30, 30, 255);
+    SDL_RenderClear(game->renderer);
+
+    string displayText = "Offset: " + offsetText;
+
+    SDL_Surface* surface = TTF_RenderText_Solid(
+        game->font, displayText.c_str(), 0, { 255, 255, 255, 255 }
+    );
+
+    if (surface) {
+        SDL_Texture* texture =
+            SDL_CreateTextureFromSurface(game->renderer, surface);
+
+        if (texture) {
+            SDL_FRect rect = { 400, 400,
+                (float)surface->w, (float)surface->h };
+
+            SDL_RenderTexture(game->renderer, texture, NULL, &rect);
+            SDL_DestroyTexture(texture);
+        }
+
+        SDL_DestroySurface(surface);
+    }
+
+    SDL_RenderPresent(game->renderer);
+}
+
 void Beatgame::InitialiseGame() { //Create lanes
     constexpr float PI = 3.14159265358979323846f;
 	float heightComp = sin(60.0 * PI / 180.0) * noteDistance;
@@ -285,6 +341,43 @@ void Beatgame::HandleInput() { //Check for input events
                 KEYS[event.key.key] = false;
 		        break;
         }   
+    }
+}
+
+void Menu::HandleInput() {
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event)) {
+        switch (event.type) {
+        case SDL_EVENT_QUIT:
+            textInputActive = false;
+            window = nullptr;
+            break;
+
+        case SDL_EVENT_TEXT_INPUT:
+            for (int i = 0; event.text.text[i] != '\0'; i++) {
+                char c = event.text.text[i];
+
+                if (c >= '0' && c <= '9') {
+                    offsetText += c;
+                }
+                else if (c == '-' && offsetText.empty()) {
+                    offsetText += c;
+                }
+            }
+            break;
+
+        case SDL_EVENT_KEY_DOWN:
+            if (event.key.key == SDLK_RETURN) {
+                SDL_StopTextInput(window);
+                textInputActive = false;
+            }
+            else if (event.key.key == SDLK_BACKSPACE &&
+                offsetText.empty()) {
+                offsetText.pop_back();
+            }
+            break;
+        }
     }
 }
 
@@ -425,6 +518,10 @@ int Note::temp() { //Used for debugging, returns the time since the note was cre
 
 bool Beatgame::IsRunning() const { //Used in main() to check if the game is running
     return isRunning;
+}
+
+void Beatgame::StopRunning() { //Used in main() to check if the game is running
+    isRunning = false;
 }
 
 void Beatgame::Update() { //Update the game state

@@ -23,7 +23,11 @@ public:
 	void Update();
 	void Render();
 	bool IsRunning() const;
+	void StopRunning();
 	void UpdateScore();
+	SDL_Window* window;
+	SDL_Renderer* renderer;
+	TTF_Font* font;
 	SDL_Texture* beatTexture;
 	SDL_Texture* beatTextureEmpty;
 	SDL_Texture* queenBee;
@@ -34,6 +38,7 @@ public:
 	string scoreText;
 	int score = 0;
 	float deltaTime = 0.0f;
+	bool isRunning;
 private:
 	const int screenWidth = 1200;
 	const int screenHeight = 1000;
@@ -41,10 +46,6 @@ private:
 	const int halfScreenHeight = (screenHeight / 2) - 75.0f;
 	const int noteDistance = 450;
 	const int fontSize = 72;
-	SDL_Window* window;
-	SDL_Renderer* renderer;
-	TTF_Font* font;
-	bool isRunning;
 	bool gameOver;
 	SDL_Color backgroundColor = { 255, 255, 255, 0 };
 	SDL_Color foregroundColor = { 73, 53, 22, 255 };
@@ -101,3 +102,15 @@ public:
 private:
 	chrono::steady_clock::time_point start_time, end_time;
 }; 
+
+class Menu {
+public:
+	Menu();
+	void InitialiseMenu(SDL_Window* gameWindow);
+	void HandleInput();
+	void Render(Beatgame* game);
+	SDL_Window* window = nullptr;
+	string offsetText = "";
+	bool textInputActive = false;
+	int offset = 0;
+};
