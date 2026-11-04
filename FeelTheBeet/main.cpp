@@ -212,7 +212,7 @@ void Beatcounter::StartBeatCounter(Beatcounter* beatcounter) {
         do {
             randomLane = dist(gen);
         } while (randomLane == lastNote);
-        lanes[randomLane]->CreateNote(nextBeat);
+        lanes[randomLane]->CreateNote(nextBeat + beatDuration);
 		lastNote = randomLane;
     }
 }
@@ -354,7 +354,6 @@ void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture, float deltaTime)
 		float dy = 450.0f - note->noteY;
 		float angleOfTravel = atan2(dy, dx);
 
-		cout << deltaTime << endl;
         note->noteX += cos(angleOfTravel) * note->speed * deltaTime;
         note->noteY += sin(angleOfTravel) * note->speed * deltaTime;
     }
