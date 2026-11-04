@@ -294,6 +294,8 @@ void Lane::CreateNote(chrono::steady_clock::time_point hitTime) { //Create a not
     note->hitTime = hitTime;
 	note->noteX = spawnX; // Set the X position based on the lane ID
     note->noteY = spawnY;
+	note->angle = angle;
+    note->speedStorage = note->speed;
 	notes.push_back(note);
 }
 
@@ -343,12 +345,18 @@ void Lane::Render(SDL_Renderer* renderer, SDL_Texture* texture, float deltaTime)
 		}
 		else if (note->temp() == 1) {
             SDL_SetTextureColorMod(texture, 234, 187, 27);
+            note->speed = 0.0f;
         }
         else if (note->temp() == 2) {
             SDL_SetTextureColorMod(texture, 56, 234, 26);
+            if (!note->turnBack) {
+                note->turnBack = true;
+                note->angle -= 180.0f;
+                note->speed = -note->speedStorage;
+            }
         }
 
-        SDL_RenderTextureRotated(renderer, texture, NULL, &destination, angle, NULL, SDL_FLIP_NONE); //Render the note
+        SDL_RenderTextureRotated(renderer, texture, NULL, &destination, note->angle, NULL, SDL_FLIP_NONE); //Render the note
 
 		float dx = 550.0f - note->noteX; //Calculate the angle of travel towards the center of the screen
 		float dy = 450.0f - note->noteY;

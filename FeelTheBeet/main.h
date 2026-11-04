@@ -51,16 +51,18 @@ private:
 class Note {
 public:
 	int lane;
-	float lingerTime = 800.0f;
-	float speed = 150.0f;
+	float lingerTime = 1200.0f;
+	float speed = 210.0f;
+	float speedStorage = 0.0f;
 	chrono::steady_clock::time_point hitTime;
 	float noteX;
 	float noteY;
 	float noteWidth = 100.0f;
 	float noteHeight = 100.0f;
+	bool turnBack = false;
+	double angle;
 	void Move();
 	float Hit();
-	void Turnback();
 	bool isExpired();
 	int temp();
 private:
