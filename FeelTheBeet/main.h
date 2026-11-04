@@ -98,7 +98,7 @@ public:
 	float timePerBeat;
 	int beatTracker;
 	bool running;
-	void StartBeatCounter(Beatcounter* beatcounter);
+	void StartBeatCounter(Beatcounter* beatcounter, const string& offsetText);
 private:
 	chrono::steady_clock::time_point start_time, end_time;
 }; 

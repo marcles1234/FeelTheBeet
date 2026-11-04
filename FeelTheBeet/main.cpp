@@ -1,8 +1,7 @@
 // Test song bpm = 106 -> 1.766 bps -> 0.566 seconds per beat
 
 /*---TODO---
-- Add entry screen
-- Input/sound offset
+- Improve entry screen
 - New song
 */
 
@@ -29,7 +28,6 @@ int main(int argc, char* argv[])
     menu.InitialiseMenu(game.window);
 
     while (menu.textInputActive && game.isRunning) {
-       
 		menu.HandleInput();
 		menu.Render(&game);
     }
@@ -47,7 +45,7 @@ int main(int argc, char* argv[])
 	beatcounter.beatTracker = 0;
 	beatcounter.running = true;
 
-	thread beatThread(&Beatcounter::StartBeatCounter, &beatcounter, &beatcounter);
+	thread beatThread(&Beatcounter::StartBeatCounter, &beatcounter, &beatcounter, menu.offsetText);
 
     Uint64 lastTime = SDL_GetPerformanceCounter();
 	while(game.IsRunning()) {
@@ -270,8 +268,11 @@ void Beatgame::InitialiseGame() { //Create lanes
 	}
 }
 
-void Beatcounter::StartBeatCounter(Beatcounter* beatcounter) {
+void Beatcounter::StartBeatCounter(Beatcounter* beatcounter, const string& offsetText) {
+	this_thread::sleep_for(chrono::milliseconds(stoi(offsetText))); //Delay the start of the beat counter by the offset value
+
     beatTracker = 1;
+
     auto beatDuration = chrono::duration_cast<chrono::steady_clock::duration>(
         chrono::duration<double>(timePerBeat)
     );
