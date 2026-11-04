@@ -1,5 +1,12 @@
 // Test song bpm = 106 -> 1.766 bps -> 0.566 seconds per beat
 
+/*---TODO---
+- Add player in the middle
+- Add entry screen
+- Input/sound offset
+- New song
+*/
+
 #include "main.h"
 
 bool KEYS[322];
@@ -113,6 +120,7 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
         return;
     }
     SDL_DestroySurface(surface);
+
     SDL_Surface* surface1 = IMG_Load("Bee-nopollen.png");
     if (!surface1) {
         cerr << "Couldn't load image: " << SDL_GetError() << endl;
@@ -124,6 +132,18 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
         return;
     }
     SDL_DestroySurface(surface1);
+
+    SDL_Surface* surface2 = IMG_Load("Queen bee.png");
+    if (!surface2) {
+        cerr << "Couldn't load image: " << SDL_GetError() << endl;
+        return;
+    }
+    queenBee = SDL_CreateTextureFromSurface(renderer, surface2);
+    if (!beatTextureEmpty) {
+        cerr << "Couldn't create texture: " << SDL_GetError() << endl;
+        return;
+    }
+    SDL_DestroySurface(surface2);
 
     SDL_Surface* backSurface = IMG_Load("Honeycomb.png");
     if (!backSurface) {
@@ -326,6 +346,9 @@ void Beatgame::Render() { //Create the window and draw the game over text if the
     SDL_RenderClear(renderer);
 
 	SDL_RenderTexture(renderer, backgroundTexture, NULL, NULL);
+
+	SDL_FRect queenBeeRect{ halfScreenWidth-35, halfScreenHeight-35, 220.0f, 220.0f };
+    SDL_RenderTexture(renderer, queenBee, NULL, &queenBeeRect);
     
     for (int i = 1; i <= 6 ; i++) {
         lanes[i]->Render(renderer, beatTexture, beatTextureEmpty, deltaTime);

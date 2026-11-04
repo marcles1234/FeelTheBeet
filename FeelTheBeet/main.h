@@ -26,6 +26,7 @@ public:
 	void UpdateScore();
 	SDL_Texture* beatTexture;
 	SDL_Texture* beatTextureEmpty;
+	SDL_Texture* queenBee;
 	SDL_Texture* textTexture;
 	SDL_Texture* backgroundTexture;
 	SDL_Surface* textSurface;
