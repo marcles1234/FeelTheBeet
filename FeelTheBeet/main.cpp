@@ -2,6 +2,7 @@
 
 /*---TODO---
 - Improve entry screen
+- Song starts on game enter
 - New song
 */
 
@@ -176,6 +177,18 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
     }
     SDL_DestroySurface(backSurface);
 
+    SDL_Surface* TutorialSurface = IMG_Load("FeelTheBeet.png");
+    if (!TutorialSurface) {
+        cerr << "Couldn't load image: " << SDL_GetError() << endl;
+        return;
+    }
+    tutorialTexture = SDL_CreateTextureFromSurface(renderer, TutorialSurface);
+    if (!tutorialTexture) {
+        cerr << "Couldn't create texture: " << SDL_GetError() << endl;
+        return;
+    }
+    SDL_DestroySurface(TutorialSurface);
+
     textSurface = TTF_RenderText_Shaded(font, "Score: 0", 0, foregroundColor, backgroundColor);
     if (!textSurface) {
         cerr << "Couldn't load text: " << SDL_GetError() << endl;
@@ -187,6 +200,8 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
         return;
     }
     SDL_DestroySurface(textSurface);
+
+
 
     //Set up key presses
     for (int i = 0; i < 322; i++) { // init them all to false
@@ -205,6 +220,9 @@ void Menu::Render(Beatgame* game) {
     SDL_SetRenderDrawColor(game->renderer, 30, 30, 30, 255);
     SDL_RenderClear(game->renderer);
 
+    SDL_FRect tutorialRect{ 0, 0, 1200, 750 };
+    SDL_RenderTexture(game->renderer, game->tutorialTexture, NULL, &tutorialRect);
+
     string displayText = "Offset: " + offsetText;
 
     SDL_Surface* surface = TTF_RenderText_Solid(
@@ -216,7 +234,7 @@ void Menu::Render(Beatgame* game) {
             SDL_CreateTextureFromSurface(game->renderer, surface);
 
         if (texture) {
-            SDL_FRect rect = { 400, 400,
+            SDL_FRect rect = { 450, 800,
                 (float)surface->w, (float)surface->h };
 
             SDL_RenderTexture(game->renderer, texture, NULL, &rect);
@@ -374,7 +392,7 @@ void Menu::HandleInput() {
                 textInputActive = false;
             }
             else if (event.key.key == SDLK_BACKSPACE &&
-                offsetText.empty()) {
+                !offsetText.empty()) {
                 offsetText.pop_back();
             }
             break;

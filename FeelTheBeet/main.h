@@ -33,6 +33,7 @@ public:
 	SDL_Texture* queenBee;
 	SDL_Texture* textTexture;
 	SDL_Texture* backgroundTexture;
+	SDL_Texture* tutorialTexture;
 	SDL_Surface* textSurface;
 	SDL_FRect textLocation;
 	string scoreText;
