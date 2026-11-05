@@ -1,9 +1,6 @@
-// Test song bpm = 106 -> 1.766 bps -> 0.566 seconds per beat
+// Song bpm = 132 -> 0.4545 seconds per beat
 
 /*---TODO---
-- Improve entry screen
-- Song starts on game enter
-- New song
 */
 
 #include "main.h"
@@ -41,7 +38,7 @@ int main(int argc, char* argv[])
     game.InitialiseGame();
 
     Beatcounter beatcounter;
-	beatcounter.bpm = 106.0f;
+	beatcounter.bpm = 132.0f;
 	beatcounter.timePerBeat = 60.0f / beatcounter.bpm;
 	beatcounter.beatTracker = 0;
 	beatcounter.running = true;
@@ -106,7 +103,7 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
     // Audio setup sourced from https://github.com/libsdl-org/SDL/blob/main/examples/audio/03-load-wav/load-wav.c
     SDL_AudioSpec spec;
     char* wav_path = NULL;
-    SDL_asprintf(&wav_path, "test.wav", SDL_GetBasePath());
+    SDL_asprintf(&wav_path, "Honeycomb-Swing.wav", SDL_GetBasePath());
     if (!SDL_LoadWAV(wav_path, &spec, &wav_data, &wav_data_len)) {
         cerr << "Couldn't load WAV file: " << SDL_GetError() << endl;
         return;
@@ -121,11 +118,6 @@ void Beatgame::InitialiseSDL() { //Import SDL and TTF libraries, create window a
 
     if (!SDL_PutAudioStreamData(stream, wav_data, wav_data_len)) { // Put the WAV data into the stream's queue
         cerr << "Couldn't queue WAV data: " << SDL_GetError() << endl;
-        return;
-    }
-
-    if (!SDL_ResumeAudioStreamDevice(stream)) { // Start audio playback
-        cerr << "Couldn't start audio playback: " << SDL_GetError() << endl;
         return;
     }
 
@@ -247,7 +239,12 @@ void Menu::Render(Beatgame* game) {
     SDL_RenderPresent(game->renderer);
 }
 
-void Beatgame::InitialiseGame() { //Create lanes
+void Beatgame::InitialiseGame() { //Start music and create lanes
+    if (!SDL_ResumeAudioStreamDevice(stream)) { // Start audio playback
+        cerr << "Couldn't start audio playback: " << SDL_GetError() << endl;
+        return;
+    }
+
     constexpr float PI = 3.14159265358979323846f;
 	float heightComp = sin(60.0 * PI / 180.0) * noteDistance;
     for (int i = 1; i < sizeof(lanes) / sizeof(lanes[0]); i++) {

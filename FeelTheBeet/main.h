@@ -56,7 +56,7 @@ class Note {
 public:
 	int lane;
 	float lingerTime = 1200.0f;
-	float speed = 200.0f;
+	float speed = 250.0f;
 	float speedStorage = 0.0f;
 	chrono::steady_clock::time_point hitTime;
 	float noteX;
