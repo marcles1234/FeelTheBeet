@@ -102,12 +102,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\marci\Downloads\C++ libs\SDL3_image\include;C:\Users\marci\Downloads\C++ libs\SDL3_ttf\include;C:\Users\marci\Downloads\C++ libs\SDL3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)SDL3_image\include;$(ProjectDir)SDL3_ttf\include;$(ProjectDir)SDL3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\marci\Downloads\C++ libs\SDL3_image\lib\x64;C:\Users\marci\Downloads\C++ libs\SDL3_ttf\lib\x64;C:\Users\marci\Downloads\C++ libs\SDL3\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)SDL3_image\lib\x64;$(ProjectDir)SDL3_ttf\lib\x64;$(ProjectDir)SDL3\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL3.lib;SDL3_test.lib;SDL3_ttf.lib;SDL3_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -119,12 +119,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\marci\Downloads\C++ libs\SDL3_ttf\include;C:\Users\marci\Downloads\C++ libs\SDL3\include;C:\Users\marci\Downloads\C++ libs\SDL3_image\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)SDL3_ttf\include;$(ProjectDir)SDL3\include;$(ProjectDir)SDL3_image\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\marci\Downloads\C++ libs\SDL3\lib\x64;C:\Users\marci\Downloads\C++ libs\SDL3_ttf\lib\x64;C:\Users\marci\Downloads\C++ libs\SDL3_image\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)SDL3\lib\x64;$(ProjectDir)SDL3_ttf\lib\x64;$(ProjectDir)SDL3_image\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL3.lib;SDL3_ttf.lib;SDL3_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
