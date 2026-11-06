@@ -75,22 +75,22 @@ private:
 
 class Lane {
 public:
-	int laneID;
 	Lane(int typeIn) {
 		laneID = typeIn;
 	}
 	void getID() {
 		cout << laneID << endl;
 	}
-	list<Note*> notes;
-	float spawnX;
-	float spawnY;
-	double angle;
 	float HitNote();
 	void CreateNote(chrono::steady_clock::time_point hitTime);
 	void CheckNotes();
 	void Render(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Texture* textureEmpty, float deltaTime);
 	void Update();
+	int laneID;
+	list<Note*> notes;
+	float spawnX;
+	float spawnY;
+	double angle;
 };
 
 class Beatcounter {

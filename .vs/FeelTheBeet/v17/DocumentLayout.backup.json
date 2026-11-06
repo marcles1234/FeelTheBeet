@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\marci\\source\\repos\\FeelTheBeet\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{24D1DCDD-CFAD-442B-B88D-E8B8B3207EBA}|FeelTheBeet\\FeelTheBeet.vcxproj|C:\\Users\\marci\\source\\repos\\FeelTheBeet\\FeelTheBeet\\main.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{24D1DCDD-CFAD-442B-B88D-E8B8B3207EBA}|FeelTheBeet\\FeelTheBeet.vcxproj|solutionrelative:FeelTheBeet\\main.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{24D1DCDD-CFAD-442B-B88D-E8B8B3207EBA}|FeelTheBeet\\FeelTheBeet.vcxproj|C:\\Users\\marci\\source\\repos\\FeelTheBeet\\FeelTheBeet\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{24D1DCDD-CFAD-442B-B88D-E8B8B3207EBA}|FeelTheBeet\\FeelTheBeet.vcxproj|solutionrelative:FeelTheBeet\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{24D1DCDD-CFAD-442B-B88D-E8B8B3207EBA}|FeelTheBeet\\FeelTheBeet.vcxproj|C:\\Users\\marci\\source\\repos\\FeelTheBeet\\FeelTheBeet\\main.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{24D1DCDD-CFAD-442B-B88D-E8B8B3207EBA}|FeelTheBeet\\FeelTheBeet.vcxproj|solutionrelative:FeelTheBeet\\main.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,30 +18,30 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "main.h",
               "DocumentMoniker": "C:\\Users\\marci\\source\\repos\\FeelTheBeet\\FeelTheBeet\\main.h",
               "RelativeDocumentMoniker": "FeelTheBeet\\main.h",
-              "ToolTip": "C:\\Users\\marci\\source\\repos\\FeelTheBeet\\FeelTheBeet\\main.h*",
-              "RelativeToolTip": "FeelTheBeet\\main.h*",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAADoAAAASAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\marci\\source\\repos\\FeelTheBeet\\FeelTheBeet\\main.h",
+              "RelativeToolTip": "FeelTheBeet\\main.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEIAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2026-10-23T15:05:44.021Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "main.cpp",
               "DocumentMoniker": "C:\\Users\\marci\\source\\repos\\FeelTheBeet\\FeelTheBeet\\main.cpp",
               "RelativeDocumentMoniker": "FeelTheBeet\\main.cpp",
               "ToolTip": "C:\\Users\\marci\\source\\repos\\FeelTheBeet\\FeelTheBeet\\main.cpp",
               "RelativeToolTip": "FeelTheBeet\\main.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAD0BAAAAAAAAAAAgwEoBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-10-23T12:54:46.041Z",
               "EditorCaption": ""

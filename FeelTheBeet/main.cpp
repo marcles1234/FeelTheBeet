@@ -544,6 +544,11 @@ void Beatgame::Update() { //Update the game state
     for (int i = 1; i <= 6; i++) {
 		lanes[i]->Update();
     }
+
+    //Check if audio is finished
+    if (SDL_GetAudioStreamQueued(stream) == 0) {
+        isRunning = false;
+    }
 }
 
 void Lane::Update() { //Called from Beatgame::Update(), checks if notes have expired and removes them if they have
