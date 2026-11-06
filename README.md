@@ -14,3 +14,4 @@ Project used SDL3, SDL3_Image and SDL3_ttf. These are all bundled into the proje
 
 ---OTHER DOCCUMENTS---
 Found in project zip file
+YouTube Video Link: https://youtu.be/Ah5bqGolT7U
